@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Inter } from "next/font/google";
+
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "./globals.css";
+
+import { config } from '@fortawesome/fontawesome-svg-core';
+config.autoAddCss = false;
 
 import { PrimeReactProvider } from 'primereact/api';
 
@@ -20,6 +26,18 @@ export default function RootLayout({
   return (
     <PrimeReactProvider>
       <html lang="fr">
+      <head>
+            <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    const style = document.createElement('style')
+                    style.innerHTML = '@layer tailwind-base, primereact, tailwind-utilities;'
+                    style.setAttribute('type', 'text/css')
+                    document.querySelector('head').prepend(style)
+                  `,
+                }}
+              />
+      </head>
         <body className={`h-screen w-full flex flex-row ${inter.className}`}>
           <aside className="h-full w-64 flex flex-col p-8 content-center gap-8 bg-nay-white">
             <h1><Link href="/">Hameau du Nay</Link></h1>
@@ -35,13 +53,15 @@ export default function RootLayout({
               <ul className="pl-3">
                 <li>Tarif Généraux</li>
                 <li>Accords</li>
-                <ul className="pl-3">
-                  <li>Nouvel accord</li>
-                  <li>Accord 1</li>
-                  <li>Accord 2</li>
-                  <li>Accord 3</li>
-                  <li>Accord 4</li>
-                </ul>
+                <li>
+                  <ul className="pl-3">
+                    <li>Nouvel accord</li>
+                    <li>Accord 1</li>
+                    <li>Accord 2</li>
+                    <li>Accord 3</li>
+                    <li>Accord 4</li>
+                  </ul>
+                </li>
               </ul>
             </div>
           </aside>
