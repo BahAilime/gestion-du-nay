@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -15,8 +16,41 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="fr">
+      <body className={`h-screen w-full flex flex-row ${inter.className}`}>
+        <aside className="h-full w-64 flex flex-col p-8 content-center gap-8 bg-nay-white">
+          <h1><Link href="/">Hameau du Nay</Link></h1>
+          <div className="">
+            <h2><Link href="/">Accueil</Link></h2>
+            <h2><Link href="/quote">Devis</Link></h2>
+            <ul className="pl-3">
+              <li><Link href="/quote/new">Nouveau devis</Link></li>
+              <li><Link href="/quote/new">Devis en cours</Link></li>
+              <li><Link href="/quote/new">Devis perdus</Link></li>
+            </ul>
+            <h2>Tarifs</h2>
+            <ul className="pl-3">
+              <li>Tarif Généraux</li>
+              <li>Accords</li>
+              <ul className="pl-3">
+                <li>Nouvel accord</li>
+                <li>Accord 1</li>
+                <li>Accord 2</li>
+                <li>Accord 3</li>
+                <li>Accord 4</li>
+              </ul>
+            </ul>
+          </div>
+        </aside>
+        <main className="h-screen w-full flex flex-col">
+          <header className="m-5">
+            <h1>BREADCRUMS</h1>
+          </header>
+          <main className="h-full w-full bg-gray-200 p-4">
+            {children}
+          </main>
+        </main>
+      </body>
     </html>
   );
 }
