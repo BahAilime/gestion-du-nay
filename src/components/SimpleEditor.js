@@ -35,6 +35,7 @@ export default function FormInput({ label, value = "", onChange = (x) => {} }) {
                 }}
                 headerTemplate={header}
                 style={{ height: '320px' }}
+                className='mt-2'
             />
         </div>
     )
