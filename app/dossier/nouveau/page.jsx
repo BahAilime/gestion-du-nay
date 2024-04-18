@@ -21,11 +21,30 @@ export default function Home() {
 
   // TODO: Remplacer par un call d'api pour avoir les clients
   const [selectedCli, setSelectedCli] = useState(null);
-  const clients = [
-      { name: 'Client 1', code: 'C1' },
-      { name: 'Client 2', code: 'C2' },
-      { name: 'Client 3', code: 'C3' },
-  ];
+  const groupedClients = [
+    {
+      label: 'Groupe',
+      code: 'GRP',
+      items: [
+          { label: 'Groupe1', value: 'jcnjd' },
+          { label: 'Groupe2', value: 'juhuhbj' },
+      ]
+    },
+    {
+        label: 'Privé',
+        code: 'PV',
+        items: [
+            { label: 'PV1', value: 'Berlin' },
+            { label: 'PV2', value: 'Frankfurt' },
+        ]
+    }
+  ]
+
+  function groupedItemTemplate (option) {
+    return (
+      <p className="font-bold">{option.label}</p>
+    );
+};
 
   return (
     <>
@@ -40,8 +59,18 @@ export default function Home() {
         </>}
 
         {activeIndex === 1 && <>
-          <Dropdown value={selectedCli} onChange={(e) => setSelectedCli(e.value)} options={clients} optionLabel="name" 
-                placeholder="Sélectionne un client" className="w-full md:w-14rem" />
+          <Dropdown
+            value={selectedCli}
+            onChange={(e) => setSelectedCli(e.value)}
+            options={groupedClients}
+            optionLabel="label" 
+            optionGroupLabel="label"
+            optionGroupChildren="items"
+            optionGroupTemplate={groupedItemTemplate}
+            className="w-full my-3"
+            placeholder="Selectionne un client"
+            filter
+          />
         </>
         }
       </Card>
