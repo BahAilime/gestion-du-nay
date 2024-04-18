@@ -69,7 +69,7 @@ export default function RootLayout({
             <header className="m-5">
               <h1>BREADCRUMS</h1>
             </header>
-            <main className="h-full w-full bg-gray-200 p-4">
+            <main className="h-full w-full bg-gray-200 p-4 overflow-y-scroll">
               {children}
             </main>
           </main>
