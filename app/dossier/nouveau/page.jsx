@@ -2,7 +2,7 @@
 import { useState } from "react";
 import useMultiState from "../../../src/hooks/useMultiState";
 import FormInput from "../../../src/components/FormInput";
-import { Button } from "primereact/button";
+import SimpleEditor from "../../../src/components/SimpleEditor";
 import { Card } from 'primereact/card';
 import { TabMenu } from 'primereact/tabmenu';
 import { Dropdown } from 'primereact/dropdown';
@@ -55,7 +55,7 @@ export default function Home() {
           <FormInput label="Nom du client" name="name" onChange={(name) => addState("username", name)}/>
           <FormInput label="Nom du responsable" name="resp" onChange={(resp) => addState("responsable", resp)}/>
           <FormInput label="Email" name="email" onChange={(email) => addState("email", email)}  keyfilter="email"/>
-          <Button onClick={() => deleteState("username")}>Woush ! :D</Button>
+          <SimpleEditor label="Notes" onChange={(text) => addState("notes", text)} />
         </>}
 
         {activeIndex === 1 && <>
