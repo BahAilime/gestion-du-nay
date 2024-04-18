@@ -48,13 +48,21 @@ export default function Home() {
 
   return (
     <>
-      <Card title="Client">
+      <Card title="Client" className="min-w-1/2">
         <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}/>
 
         {activeIndex === 0 && <>
-          <FormInput label="Nom du client" name="name" onChange={(name) => addState("username", name)}/>
+          <FormInput label="Nom du dossier" name="name" onChange={(name) => addState("username", name)}/>
           <FormInput label="Nom du responsable" name="resp" onChange={(resp) => addState("responsable", resp)}/>
-          <FormInput label="Email" name="email" onChange={(email) => addState("email", email)}  keyfilter="email"/>
+          <div className="flex w-full gap-4 flex-col lg:flex-row flex-wrap">
+            <FormInput label="Email" name="email" onChange={(email) => addState("email", email)}  keyfilter="email"/>
+            <FormInput label="Téléphone" name="tel" onChange={(tel) => addState("tel", tel)}/>
+          </div>
+          <FormInput label="Adresse" name="name" onChange={(name) => addState("username", name)}/>
+          <div className="flex w-full gap-4 flex-wrap">
+            <FormInput label="Ville" name="name" onChange={(name) => addState("username", name)}/>
+            <FormInput label="Code postal" name="name" onChange={(name) => addState("username", name)} keyfilter="pnum"/>
+          </div>
           <SimpleEditor label="Notes" onChange={(text) => addState("notes", text)} />
         </>}
 
