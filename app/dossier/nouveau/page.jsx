@@ -15,8 +15,8 @@ export default function Home() {
   // Tabs des nouveau client / deja venu
   const [activeIndex, setActiveIndex] = useState(0);
   const items = [
-    { label: 'Nouveau client', icon: <FontAwesomeIcon icon={faPlus} className="mx-2"/> },
-    { label: 'Déja venu', icon: <FontAwesomeIcon icon={faHeart} className="mx-2"/>},
+    { label: 'Nouveau client', icon: <FontAwesomeIcon icon={faPlus} className="mr-2"/> },
+    { label: 'Déja venu', icon: <FontAwesomeIcon icon={faHeart} className="mr-2"/>},
   ];
 
   // TODO: Remplacer par un call d'api pour avoir les clients
