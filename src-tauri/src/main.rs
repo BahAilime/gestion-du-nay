@@ -8,15 +8,17 @@ fn main() {
         version: 1,
         description: "Table des clients",
         sql: "CREATE TABLE client (
-          id_cli INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-          nom_cli INTEGER,
+          id_cli INTEGER NOT NULL,
+          nom_cli TEXT,
           resp_cli TEXT,
-          email_cli TEXT,
-          tel_cli TEXT,
-          adr_cli TEXT,
-          cp_cli INTEGER,
-          ville_cli TEXT
-        );",
+          email_cli	TEXT,
+          tel_cli	TEXT,
+          adr_cli	TEXT,
+          cp_cli TEXT,
+          ville_cli	TEXT,
+          notes_cli	TEXT,
+          PRIMARY KEY('id_cli' AUTOINCREMENT)
+        )",
         kind: MigrationKind::Up,
     }
   ];
