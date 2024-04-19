@@ -20,5 +20,9 @@ export default function useMultiState() {
         setData({...data});
     }
 
-    return [data, addState, getState, deleteState];
+    function setState(data) {
+        setData(data);
+    }
+
+    return [data, addState, getState, deleteState, setState];
 }
