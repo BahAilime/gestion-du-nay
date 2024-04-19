@@ -10,7 +10,7 @@ export default function FormInput({ label = "", value = "", onChange = (x) => {}
                 <select className="ql-size">
                     <option value="huge">Enorme</option>
                     <option value="large">Grand</option>
-                    <option selected>Normal</option>
+                    <option select="true">Normal</option>
                     <option value="small">Petit</option>
                 </select>
                 <span className="ql-formats">
