@@ -1,4 +1,22 @@
+'use client'
+import Database from "tauri-plugin-sql-api";
+import { useEffect, useState } from 'react';
+
 export default function Home() {
+
+    useEffect(() => {
+      async function fetchData() {
+        try {
+            const db = await Database.load("sqlite:nay.db")
+            const hmm = await db.select("SELECT id_cli FROM client")
+            console.log(hmm)
+        } catch (e) {
+            console.error(e);
+        }
+    };
+    fetchData();
+    }, [])
+
     return (
       <>
         <h1>Nouveau devis ?????</h1>
