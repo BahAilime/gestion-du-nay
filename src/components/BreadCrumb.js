@@ -10,7 +10,12 @@ export default function BreadCrumb() {
     for (let i = 0; i < pathlist.length; i++) {
         if (pathlist[i] === "") continue
         breadcrumbItems.push({
-            template: () => <Link href={"/" + pathlist.slice(1, i + 1).join("/")}>{pathlist[i][0].toUpperCase() + pathlist[i].slice(1)}</Link>
+            template: () => <Link
+                href={"/" + pathlist.slice(1, i + 1).join("/")}
+                className='hover:text-nay-orange'
+            >
+                {pathlist[i][0].toUpperCase() + pathlist[i].slice(1)}
+            </Link>
         })
     }
 
