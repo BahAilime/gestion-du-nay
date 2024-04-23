@@ -27,37 +27,38 @@ export default function RootLayout({
 }>) {
 
   return (
-    <PrimeReactProvider>
-      <html lang="fr">
-      <head>
-            <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    const style = document.createElement('style')
-                    style.innerHTML = '@layer tailwind-base, primereact, tailwind-utilities;'
-                    style.setAttribute('type', 'text/css')
-                    document.querySelector('head').prepend(style)
-                  `,
-                }}
+      <PrimeReactProvider>
+        <html lang="fr">
+        <head>
+              <script
+                  dangerouslySetInnerHTML={{
+                    __html: `
+                      const style = document.createElement('style')
+                      style.innerHTML = '@layer tailwind-base, primereact, tailwind-utilities;'
+                      style.setAttribute('type', 'text/css')
+                      document.querySelector('head').prepend(style)
+                    `,
+                  }}
+                />
+        </head>
+          <body className={`h-screen w-full flex flex-row ${gabarito.className}`}>
+            <aside className="h-full flex flex-col p-8 content-center gap-3 bg-nay-white">
+              <Nay
+                className='w-16 mx-auto'
+                // fill-nay-cyan-300
               />
-      </head>
-        <body className={`h-screen w-full flex flex-row ${gabarito.className}`}>
-          <aside className="h-full flex flex-col p-8 content-center gap-3 bg-nay-white">
-            <Nay
-              className='fill-nay-cyan-300 w-16 mx-auto'
-            />
-            <Menu />
-          </aside>
-          <main className="h-screen w-full flex flex-col">
-            <header className="m-5">
-              <BreadCrumb />
-            </header>
-            <main className="h-full w-full bg-gray-200 p-4 overflow-y-scroll">
-              {children}
+              <Menu />
+            </aside>
+            <main className="h-screen w-full flex flex-col">
+              <header className="m-5">
+                <BreadCrumb />
+              </header>
+              <main className="h-full w-full bg-gray-200 p-4 overflow-y-scroll">
+                {children}
+              </main>
             </main>
-          </main>
-        </body>
-      </html>
-    </PrimeReactProvider>
+          </body>
+        </html>
+      </PrimeReactProvider>
   );
 }
