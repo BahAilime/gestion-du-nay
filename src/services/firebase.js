@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-import dotenv from 'dotenv';
-dotenv.config({ path: `@/.env.local` })
+// import dotenv from 'dotenv';
+// dotenv.config({ path: `@/.env.local` })
 
 
 const firebaseConfig = {
