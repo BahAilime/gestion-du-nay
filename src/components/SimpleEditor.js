@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Editor } from 'primereact/editor';
 
-export default function FormInput({ label = "", value = "", onChange = (x) => {} }) {
-    const [text, setText] = useState('<div>Hello World!</div><div>PrimeReact <b>Editor</b> Rocks</div><div><br></div>');
+export default function FormInput({ label = "", value = "", onChange = (x) => {}, readOnly = false }) {
+    const [text, setText] = useState(value);
 
     const renderHeader = () => {
         return (
@@ -26,7 +26,7 @@ export default function FormInput({ label = "", value = "", onChange = (x) => {}
 
     return (
         <div className="my-2">
-            {label && <label value={value}>{label}</label> }
+            {label && <label>{label}</label> }
             <Editor
                 value={text}
                 onTextChange={(e) => {
@@ -34,8 +34,9 @@ export default function FormInput({ label = "", value = "", onChange = (x) => {}
                     onChange(e.htmlValue)
                 }}
                 headerTemplate={header}
-                style={{ height: '320px' }}
+                style={{ height: '200px' }}
                 className='mt-2'
+                readOnly={readOnly}
             />
         </div>
     )
