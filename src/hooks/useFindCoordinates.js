@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 export default function useFindCoordinates(searchInfos = []) {
-  const [coordinates, setCoordinates] = useState()
+  const [coordinates, setCoordinates] = useState<[number, number]>([621, 926])
 
   /**
    * Trouve les coordonnées d'un lieu en utilisant les informations fournies dans un array de strings
@@ -17,15 +17,16 @@ export default function useFindCoordinates(searchInfos = []) {
     return data.length > 0 ? [parseFloat(data[0].lat), parseFloat(data[0].lon)] : []
   }
 
+  
   /**
-   * Cherche les coordonnées l'array de strings fourni en paramètre
+   * Une fonction qui définit les coordonnées en fonction de l'array d'informations fourni.
    *
-   * @param {Array} infos - Un tableau de chaînes de caractères contenant les informations pour lesquelles trouver les coordonnées.
-   * @return {Promise<void>} Une promesse qui se résout lorsque les informations de recherche sont définies.
+   * @param {Array} infos - Un array d'informations utilisé pour déterminer les coordonnées.
+   * @return {void}
    */
-  async function setSearchInfos(infos) {
+  function setSearchInfos(infos) {
     while (infos.length > 1) {
-      const coordinates = await fetchCoordinates(infos)
+      const coordinates = fetchCoordinates(infos)
       if (coordinates.length === 0) {
         infos.shift()
       } else {
@@ -33,8 +34,18 @@ export default function useFindCoordinates(searchInfos = []) {
       }
     }
 
-    setCoordinates(await fetchCoordinates(infos))
+    setCoordinates(fetchCoordinates(infos))
   }
 
-  return [coordinates, setSearchInfos]
+
+  /**
+   * Détermine si un élément a été trouvé en vérifiant si les coordonnées correspondent aux coordonnées attendues.
+   *
+   * @return {boolean} Retourne true si l'élément a été trouvé, false sinon.
+   */
+  function haveBeenFound() {
+    return coordinates[0] !== 621 || coordinates[1] !== 926
+  }
+
+  return [coordinates, haveBeenFound, setSearchInfos]
 }
