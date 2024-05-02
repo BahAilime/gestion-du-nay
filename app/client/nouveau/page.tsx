@@ -21,7 +21,7 @@ export default function Home() {
           .then((oh) => {
             try {
               searchParams.append("firebase_id", oh.key ?? "error")
-              router.push(`/client/view?${searchParams.toString()}`)
+          router.push(`/client/detail?${searchParams.toString()}`)
             } catch (error) {
               console.log(error)
             }

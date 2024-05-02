@@ -31,7 +31,7 @@ export default function Home() {
     return (
         <Card title="Clients" className="w-full h-full">
             {client ?
-            <DataTable  value={client} className="w-full" selectionMode="single" onSelectionChange={(e) => router.push(`/client/view?firebase_id=${e.value.firebase_id}`)}>
+            <DataTable  value={client} className="w-full" selectionMode="single" onSelectionChange={(e) => router.push(`/client/detail?firebase_id=${e.value.firebase_id}`)}>
                 <Column field="nom_cli" header="Nom"></Column>
                 <Column field="resp_cli" header="Resp"></Column>
                 <Column field="email_cli" header="Email"></Column>
