@@ -26,14 +26,14 @@ export default function FormInput({ label = "", value = "", onChange = (x) => {}
 
     return (
         <div className="my-2">
-            {label && <label>{label}</label> }
+            {(label && !readOnly) && <label>{label}</label> }
             <Editor
                 value={text}
                 onTextChange={(e) => {
                     setText(e.htmlValue)
                     onChange(e.htmlValue)
                 }}
-                headerTemplate={header}
+                headerTemplate={readOnly ? <>{label}</> : header}
                 style={{ height: '200px' }}
                 className='mt-2'
                 readOnly={readOnly}
