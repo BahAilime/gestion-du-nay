@@ -4,26 +4,26 @@ import { ref, child, get, onValue, push} from "firebase/database";
 
 const clientsRef = ref(db, "client");
 
-export function getClientOnce(id: number) {
-        get(child(clientsRef, `${id}`))
-            .then((snapshot) => {
-                if (snapshot.exists()) {
-                    return snapshot.val()
-                } else {
-                    return {}
-                }
-            }).catch((error) => {
-                console.warn("DB getClientOnce:", error);
-            });
+export function getClientOnce(id: number|string): Promise<any> {
+    return get(child(clientsRef, `${id}`))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                return snapshot.val();
+            } else {
+                return {};
+            }
+        }).catch((error) => {
+            console.warn("DB getClientOnce:", error);
+        });
 }
 
 export function getClientsOnce() {
-    get(clientsRef)
+    return get(clientsRef)
         .then((snapshot) => {
             if (snapshot.exists()) {
-                return snapshot.val()
+                return snapshot.val();
             } else {
-                return {}
+                return {};
             }
         }).catch((error) => {
             console.warn("DB getClientsOnce:", error);
