@@ -1,5 +1,5 @@
 'use client'
-import { redirect, useSearchParams } from "next/navigation"
+import { redirect, useRouter, useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic";
 import { Card } from "primereact/card";
 import { faUser } from '@fortawesome/free-solid-svg-icons'
@@ -26,6 +26,7 @@ export default function Home() {
     const params = useSearchParams()
     const firebase_id = params.get("firebase_id")
     const [coo, setQuery] = useFindCoordinates()
+    const router = useRouter();
 
     useEffect(() => {
         if (!firebase_id) {
@@ -54,7 +55,7 @@ export default function Home() {
         
         return (
             <div className="flex gap-4 h-full">
-                <Card title={nom_cli ?? "Client"} className="flex-1">
+                <Card title={nom_cli ?? "Client"} className="flex-1 overflow-y-auto">
                     {resp_cli && <><h1 className="my-1 font-bold">Responsable</h1><p>{resp_cli}</p></>}
                     {(email_cli && tel_cli) && <div className="flex gap-2">
                         <div className="flex-1">
@@ -67,10 +68,10 @@ export default function Home() {
                         </div>
                     </div>}
                     {notes_cli && <><h1 className="my-1 font-bold">Notes</h1><SimpleEditor value={notes_cli} readOnly={true} /> </>}
-                    <BigButton text="Modifier le client" icon={faPenToSquare} onClick={() => {}} />
+                    <BigButton text="Modifier le client" icon={faPenToSquare} onClick={() => { router.push(`/client/modifier?firebase_id=${firebase_id}`)}} />
                 </Card>
                 {coo && (
-                    <Card title="Carte" className="flex-1">
+                    <Card title="Carte" className="flex-1 overflow-y-auto">
                         {address && <p>{address}</p>}
                         <Map position={coo} zoom={6} icon={faUser}/>
                     </Card>
