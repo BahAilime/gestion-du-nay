@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import useMultiState from "../hooks/useMultiState";
 import FormInput from "./FormInput";
@@ -8,9 +8,11 @@ import { useMountEffect } from 'primereact/hooks';
 
 export default function ClientForm({ dataImport={}, onChange = (x) => {} }) {
     const [ data, addState, getState, deleteState, setState ] = useMultiState();
+    const [ready, setReady] = useState(false)
 
     useMountEffect(() => {
         setState(dataImport);
+        setReady(true)
     })
 
     useEffect(() => {
@@ -30,7 +32,7 @@ export default function ClientForm({ dataImport={}, onChange = (x) => {} }) {
                 <FormInput value={data.ville_cli} label="Ville" name="ville" onChange={(ville) => addState("ville_cli", ville)}/>
                 <FormInput value={data.cp_cli} label="Code postal" name="cp" onChange={(cp) => addState("cp_cli", cp)} keyfilter="pnum"/>
             </div>
-            <SimpleEditor value={data.notes_cli} label="Notes" onChange={(text) => addState("notes_cli", text)} />
+            {ready && <SimpleEditor value={data.notes_cli} label="Notes" onChange={(text) => addState("notes_cli", text)} />}
         </>
     );
 }
