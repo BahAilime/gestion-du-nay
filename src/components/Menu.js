@@ -17,6 +17,9 @@ export default function Menu() {
             <MenuSection text="Clients"/>
             <MenuItem text="Nouveau client" icon={menuIcon(faUserPlus)} url="/client/nouveau"/>
             <MenuItem text="Liste des clients" icon={menuIcon(faUsers)} url="/client"/>
+            <MenuSection text="Tests (DEV)"/>
+            <MenuItem text="Carte" icon={menuIcon(faFolderPlus)} url="/test/map"/>
+            <MenuItem text="Carte + hook" icon={menuIcon(faFolderPlus)} url="/test/maphook"/>
         </div>
     )
 }
