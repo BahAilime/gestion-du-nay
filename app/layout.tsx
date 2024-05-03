@@ -7,16 +7,16 @@ import "./globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-// NextJs
-import Image from "next/image";
-import Link from "next/link";
-import { Gabarito } from "next/font/google";
-
 // PrimeReact
 import { PrimeReactProvider } from 'primereact/api';
+
+// Components
 import BreadCrumb from '../src/components/BreadCrumb';
 import Menu from '../src/components/Menu';
 import Nay from '../src/components/NaySvg';
+
+// NextJs
+import { Gabarito } from "next/font/google";
 
 const gabarito = Gabarito({ subsets: ["latin"] });
 
