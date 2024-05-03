@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ClientForm from "../../../src/components/ClientForm";
 import { Card } from 'primereact/card';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'
-import BigButton from "@/src/components/bigButton";
+import BigButton from "@/src/components/BigButton";
 import { getClientOnce, updateClient } from "@/src/services/db";
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 

@@ -7,7 +7,7 @@ import { useEffect, useState, useMemo } from "react"
 import useFindCoordinates from "@/src/hooks/useFindCoordinates";
 import Loading from "@/src/components/Loading";
 import SimpleEditor from "@/src/components/SimpleEditor";
-import BigButton from "@/src/components/bigButton";
+import BigButton from "@/src/components/BigButton";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
 import { deleteClient, getClientOnce } from "@/src/services/db";
