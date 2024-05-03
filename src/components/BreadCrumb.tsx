@@ -19,7 +19,7 @@ export default function BreadCrumb() {
         })
     }
 
-    const home = { template: () => <Link href="/"><FontAwesomeIcon icon={faHouse} className='text-nay-orange' /></Link>}
+    const home = { template: () => <Link href="/"><FontAwesomeIcon icon={faHouse} className='text-nay-orange' /> <span className="absolute text-transparent">Accueil</span></Link>}
 
     return (
         <Bread model={breadcrumbItems} home={home} className='w-max'/>
