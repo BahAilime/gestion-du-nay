@@ -1,5 +1,5 @@
 import { db } from "@/src/services/firebase";
-import { ref, child, get, onValue, push, update} from "firebase/database";
+import { ref, child, get, onValue, push, update, remove} from "firebase/database";
 
 
 const clientsRef = ref(db, "client");
@@ -58,3 +58,18 @@ export function updateClient(id: number|string, data: object, callback: () => vo
             }
         })
 }
+
+export function deleteClient(id: number|string, callback: () => void) {
+    get(child(clientsRef, `${id}`))
+        .then((snapshot) => {
+            console.log("cool1 !!!")
+            if (snapshot.exists()) {
+                console.log("cool2 !!!")
+                remove(snapshot.ref)
+                    .then(() => {
+                        callback()
+                        console.log("cool3 !!!")
+                    })
+            }
+        })
+    }
