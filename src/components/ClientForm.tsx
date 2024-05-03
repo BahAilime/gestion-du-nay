@@ -11,7 +11,7 @@ import { faQuestion, faSchool, faPersonShelter, faGift, faWheelchairMove, faGrad
 
 import { SelectButton } from 'primereact/selectbutton';
 
-export default function ClientForm({ dataImport={}, onChange = (x) => {} }) {
+export default function ClientForm({ dataImport={}, onChange = (x: any) => {x} }) {
     const [ data, addState, getState, deleteState, setState ] = useMultiState();
     const [ready, setReady] = useState(false)
 
@@ -36,7 +36,7 @@ export default function ClientForm({ dataImport={}, onChange = (x) => {} }) {
         {icon: faEye, value: 'Autre'},
     ];
 
-    const templateBtn = (option) => {
+    const templateBtn = (option: {icon: any, value: string}) => {
         return (
         <div className="flex flex-col items-center, justify-center">
             <FontAwesomeIcon icon={option.icon} className="text-xl"/>
