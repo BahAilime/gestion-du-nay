@@ -1,21 +1,20 @@
-'use client'
-import { redirect, useRouter, useSearchParams } from "next/navigation"
+"use client"
+import { useRouter, useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic";
 import { Card } from "primereact/card";
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState, useMemo } from "react"
 import useFindCoordinates from "@/src/hooks/useFindCoordinates";
 import Loading from "@/src/components/Loading";
 import SimpleEditor from "@/src/components/SimpleEditor";
 import BigButton from "@/src/components/bigButton";
-import { Button } from 'primereact/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import { getClientOnce } from "@/src/services/db";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import { deleteClient, getClientOnce } from "@/src/services/db";
 
 export default function Home() {
     const Map = useMemo(() => dynamic(
-        () => import('@/src/components/Map'),
+        () => import("@/src/components/Map"),
         { 
           loading: () => <Loading text={"Chargement de la carte..."} />,
           ssr: false
@@ -28,9 +27,28 @@ export default function Home() {
     const [coo, setQuery] = useFindCoordinates()
     const router = useRouter();
 
+    const confirmSuppr = () => {
+        confirmDialog({
+            message: "Êtes-vous sûr de vouloir supprimer ce client ?",	
+            header: "Suppression",
+            acceptLabel: "Oui",
+            rejectLabel: "Non",
+            accept,
+        });
+    };
+
+    function accept() {
+        if (!firebase_id) {
+            router.push("/client")
+        }
+        deleteClient(firebase_id, () => {
+            router.push("/client")
+        })
+    }
+
     useEffect(() => {
         if (!firebase_id) {
-            redirect("/client")
+            router.push("/client")
         }
         getClientOnce(firebase_id).then((user) => {   
             const addressComponents = [
@@ -55,6 +73,7 @@ export default function Home() {
         
         return (
             <div className="flex gap-4 h-full">
+                <ConfirmDialog />
                 <Card title={nom_cli ?? "Client"} className="flex-1 overflow-y-auto">
                     {resp_cli && <><h1 className="my-1 font-bold">Responsable</h1><p>{resp_cli}</p></>}
                     {(email_cli && tel_cli) && <div className="flex gap-2">
@@ -68,7 +87,10 @@ export default function Home() {
                         </div>
                     </div>}
                     {notes_cli && <><h1 className="my-1 font-bold">Notes</h1><SimpleEditor value={notes_cli} readOnly={true} /> </>}
-                    <BigButton text="Modifier le client" icon={faPenToSquare} onClick={() => { router.push(`/client/modifier?firebase_id=${firebase_id}`)}} />
+                    <div className="flex gap-2">
+                        <BigButton className="flex-1" text="Modifier le client" icon={faPenToSquare} onClick={() => { router.push(`/client/modifier?firebase_id=${firebase_id}`)}} />
+                        <BigButton className="max-w-32" text="Supprimer le client" icon={faTrash} onClick={confirmSuppr} />
+                    </div>
                 </Card>
                 {coo && (
                     <Card title="Carte" className="flex-1 overflow-y-auto">
