@@ -12,7 +12,7 @@ import { faQuestion, faSchool, faPersonShelter, faGift, faWheelchairMove, faGrad
 import { SelectButton } from 'primereact/selectbutton';
 
 export default function ClientForm({ dataImport={}, onChange = (x: any) => {x} }) {
-    const [ data, addState, getState, deleteState, setState ] = useMultiState();
+    const [ data, addState,,, setState ] = useMultiState();
     const [ready, setReady] = useState(false)
 
     useMountEffect(() => {
