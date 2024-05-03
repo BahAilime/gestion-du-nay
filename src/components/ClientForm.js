@@ -6,6 +6,11 @@ import SimpleEditor from "./SimpleEditor";
 
 import { useMountEffect } from 'primereact/hooks'; 
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestion, faSchool, faPersonShelter, faGift, faWheelchairMove, faGraduationCap, faEye } from '@fortawesome/free-solid-svg-icons'
+
+import { SelectButton } from 'primereact/selectbutton';
+
 export default function ClientForm({ dataImport={}, onChange = (x) => {} }) {
     const [ data, addState, getState, deleteState, setState ] = useMultiState();
     const [ready, setReady] = useState(false)
@@ -17,10 +22,40 @@ export default function ClientForm({ dataImport={}, onChange = (x) => {} }) {
 
     useEffect(() => {
         onChange(data)
+        console.log(data);
     }, [data])
+
+    // TODO: rendre ca configurable
+    const optionsBtn = [
+        {icon: faQuestion, value: 'Inconnu'},
+        {icon: faSchool, value: 'École'},
+        {icon: faPersonShelter, value: 'CLSH/CE/ASS'},
+        {icon: faWheelchairMove, value: 'Handi'},
+        {icon: faGraduationCap, value: 'Formation'},
+        {icon: faGift, value: 'Privé'},
+        {icon: faEye, value: 'Autre'},
+    ];
+
+    const templateBtn = (option) => {
+        return (
+        <div className="flex flex-col items-center, justify-center">
+            <FontAwesomeIcon icon={option.icon} className="text-xl"/>
+            <h1>{option.value}</h1>
+        </div>
+    );
+    }
 
     return (
         <>
+            <div className="flex justify-center items-center w-full">
+                <SelectButton
+                    value={data.type_cli}
+                    onChange={(type) => addState("type_cli", type.value)}
+                    itemTemplate={templateBtn}
+                    optionLabel="value"
+                    options={optionsBtn}
+                />
+            </div>
             <FormInput value={data.nom_cli} label="Nom de la structure" name="name" onChange={(name) => addState("nom_cli", name)}/>
             <FormInput value={data.resp_cli} label="Nom du responsable" name="resp" onChange={(resp) => addState("resp_cli", resp)}/>
             <div className="flex w-full gap-4 flex-col lg:flex-row flex-wrap">
