@@ -1,16 +1,20 @@
 "use client"
+import { useEffect, useState, useMemo } from "react"
+
 import { useRouter, useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic";
+
 import { Card } from "primereact/card";
-import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
-import { useEffect, useState, useMemo } from "react"
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+
+import { faTrash, faUser, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+
 import useFindCoordinates from "@/src/hooks/useFindCoordinates";
+
+import { deleteClient, getClientOnce } from "@/src/services/db";
 import Loading from "@/src/components/Loading";
 import SimpleEditor from "@/src/components/SimpleEditor";
 import BigButton from "@/src/components/BigButton";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
-import { deleteClient, getClientOnce } from "@/src/services/db";
 
 export default function Home() {
     const Map = useMemo(() => dynamic(
@@ -40,6 +44,7 @@ export default function Home() {
     function accept() {
         if (!firebase_id) {
             router.push("/client")
+            return
         }
         deleteClient(firebase_id, () => {
             router.push("/client")
@@ -49,6 +54,7 @@ export default function Home() {
     useEffect(() => {
         if (!firebase_id) {
             router.push("/client")
+            return
         }
         getClientOnce(firebase_id).then((user) => {   
             const addressComponents = [
