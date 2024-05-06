@@ -1,5 +1,5 @@
 import { db } from "@/src/services/firebase";
-import { ref, child, get, onValue, push, update, remove, serverTimestamp } from "firebase/database";
+import { ref, child, get, onValue, push, update, remove, serverTimestamp, query, orderByChild} from "firebase/database";
 
 
 const clientsRef = ref(db, "client");
@@ -18,16 +18,21 @@ export function getClientOnce(id: number|string): Promise<any> {
         });
 }
 
-export function getClientsOnce() {
-    return get(clientsRef)
+export function getClientsOnce(): Promise<any[]> {
+    return get(query(clientsRef, orderByChild("lastSeen")))
         .then((snapshot) => {
             if (snapshot.exists()) {
-                return snapshot.val();
+                const clients: any[] = []
+                snapshot.forEach((snapClient) => {
+                    clients.push({...snapClient.val(), firebase_id: snapClient.key});
+                });
+                return clients.reverse();
             } else {
-                return {};
+                return [];
             }
         }).catch((error) => {
             console.warn("DB getClientsOnce:", error);
+            return [];
         });
 }
 

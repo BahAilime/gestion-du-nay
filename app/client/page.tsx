@@ -3,28 +3,17 @@ import { useEffect, useState } from 'react';
 import { Card } from 'primereact/card';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { ref, onValue } from "firebase/database"
-import { db } from "@/src/services/firebase";
 import { useRouter } from 'next/navigation'
 import Loading from '@/src/components/Loading';
+import { getClientsOnce } from '@/src/services/db';
 
 export default function Home() {
     const [client, setClient] = useState<any[]>();
-    const clientRef = ref(db, 'client');
     const router = useRouter();
 
     useEffect(() => {
-        onValue(clientRef, (snapshot) => {
-            const data = snapshot.val();
-            const hahadata = []
-            for (const key in data) {
-                // add the key as a value
-                data[key].firebase_id = key;                
-                hahadata.push(data[key]);
-            }
-            setClient(hahadata);
-
-
+        getClientsOnce().then((data) => {
+            setClient(data);
         });
     }, [])
 
