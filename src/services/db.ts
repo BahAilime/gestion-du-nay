@@ -62,13 +62,10 @@ export function updateClient(id: number|string, data: object, callback: () => vo
 export function deleteClient(id: number|string, callback: () => void) {
     get(child(clientsRef, `${id}`))
         .then((snapshot) => {
-            console.log("cool1 !!!")
             if (snapshot.exists()) {
-                console.log("cool2 !!!")
                 remove(snapshot.ref)
                     .then(() => {
                         callback()
-                        console.log("cool3 !!!")
                     })
             }
         })
