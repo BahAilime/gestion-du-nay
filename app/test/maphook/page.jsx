@@ -14,16 +14,15 @@ export default function Page() {
         }
       ), [])
     
-    const [coo, setQuery] = useFindCoordinates()
+    const { coordinates, setSearchInfos } = useFindCoordinates()
 
     return (
         <Card className='w-full h-full'>
             <h1>Test map + hook:</h1>
-            <p>{JSON.stringify(coo)}</p>
-            <Map position={coo} zoom={7} />
+            <Map position={coordinates} zoom={7} />
             <form onSubmit={(e) => {
                 e.preventDefault()
-                setQuery([document.querySelector("#query").value])
+                setSearchInfos([document.querySelector("#query").value])
             }}>
                 <input type="text" name="" id="query"/>
                 <button type="submit">Submit</button>
