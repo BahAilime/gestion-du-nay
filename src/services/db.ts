@@ -1,5 +1,5 @@
 import { db } from "@/src/services/firebase";
-import { ref, child, get, onValue, push, update, remove} from "firebase/database";
+import { ref, child, get, onValue, push, update, remove, serverTimestamp } from "firebase/database";
 
 
 const clientsRef = ref(db, "client");
@@ -8,6 +8,7 @@ export function getClientOnce(id: number|string): Promise<any> {
     return get(child(clientsRef, `${id}`))
         .then((snapshot) => {
             if (snapshot.exists()) {
+                update(snapshot.ref, {lastSeen: serverTimestamp()})
                 return snapshot.val();
             } else {
                 return {};
@@ -42,14 +43,16 @@ export function subscribeToClients(callback: (clients: any) => void) {
       });
 }
 
-export function newClient(data: object, callback: (client: any) => void) {
+export function newClient(data: any, callback: (client: any) => void) {
+    data.lastSeen = serverTimestamp()
     push(clientsRef, data)
         .then((newCli) => {
             callback(newCli)
         })
 }
 
-export function updateClient(id: number|string, data: object, callback: () => void) {
+export function updateClient(id: number|string, data: any, callback: () => void) {
+    data.lastSeen = serverTimestamp()
     get(child(clientsRef, `${id}`))
         .then((snapshot) => {
             if (snapshot.exists()) {
