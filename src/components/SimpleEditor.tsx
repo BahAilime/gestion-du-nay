@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Editor } from 'primereact/editor';
 
-export default function FormInput({ label = "", value = "", onChange = (x) => {}, readOnly = false }) {
+export default function FormInput({ label = "", value = "", onChange = (x: any) => {x}, readOnly = false } : 
+                        { label?: string, value?: string, onChange?: (x: any) => void, readOnly?: boolean }) {
     const [text, setText] = useState(value);
 
     const renderHeader = () => {
@@ -10,7 +11,7 @@ export default function FormInput({ label = "", value = "", onChange = (x) => {}
                 <select className="ql-size">
                     <option value="huge">Enorme</option>
                     <option value="large">Grand</option>
-                    <option select="true">Normal</option>
+                    <option selected>Normal</option>
                     <option value="small">Petit</option>
                 </select>
                 <span className="ql-formats">
@@ -30,7 +31,9 @@ export default function FormInput({ label = "", value = "", onChange = (x) => {}
             <Editor
                 value={text}
                 onTextChange={(e) => {
-                    setText(e.htmlValue)
+                    if (e.htmlValue) {
+                        setText(e.htmlValue)
+                    }
                     onChange(e.htmlValue)
                 }}
                 headerTemplate={readOnly ? <>{label}</> : header}
