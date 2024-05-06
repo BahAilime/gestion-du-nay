@@ -1,8 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-// import dotenv from 'dotenv';
-// dotenv.config({ path: `@/.env.local` })
-
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
