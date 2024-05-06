@@ -28,7 +28,7 @@ export default function Home() {
     const [user, setUser] = useState()
     const params = useSearchParams()
     const firebase_id = params.get("firebase_id")
-    const [coo, setQuery] = useFindCoordinates()
+    const { coordinates, setSearchInfos } = useFindCoordinates()
     const router = useRouter();
 
     const confirmSuppr = () => {
@@ -63,7 +63,7 @@ export default function Home() {
                 user.cp_cli
             ].filter(Boolean);
 
-            setQuery(addressComponents);
+            setSearchInfos(addressComponents);
             setUser(user)
         }).catch((error) => {
             console.error(error);
@@ -98,10 +98,10 @@ export default function Home() {
                         <BigButton className="w-fit p-inputgroup-addon bg-red-600 hover:bg-red-700" text="Supprimer" icon={faTrash} onClick={confirmSuppr} />
                     </div>
                 </Card>
-                {coo && (
+                {coordinates && (
                     <Card title="Carte" className="flex-1 overflow-y-auto">
                         {address && <p>{address}</p>}
-                        <Map position={coo} zoom={6} icon={faUser}/>
+                        <Map position={coordinates} zoom={6} icon={faUser}/>
                     </Card>
                 ) }
             </div>

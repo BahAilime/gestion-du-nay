@@ -40,5 +40,5 @@ export default function useFindCoordinates() {
     setCoordinates(await fetchCoordinates(infos))
   }
 
-  return [coordinates, setSearchInfos]
+  return {coordinates, setSearchInfos}
 }
