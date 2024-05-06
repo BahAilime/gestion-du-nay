@@ -2,10 +2,10 @@ import MenuItem from "./MenuItem";
 import MenuSection from "./MenuSection";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus, faFolderTree, faUserPlus, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faFolderPlus, faFolderTree, faUserPlus, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 export default function Menu() {
-    function menuIcon(icon) {
+    function menuIcon(icon: IconDefinition): JSX.Element {
         return <FontAwesomeIcon icon={icon} className="text-nay-cyan-200"/>
     }
     
