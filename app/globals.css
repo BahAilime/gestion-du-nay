@@ -9,19 +9,9 @@
   @tailwind utilities;
 }
 
-@media print {
-  /* *:has(:not(.print)) {
-  } */
-  
-  :not(.print):not(:has(.print)) {
-    /* Your styles here */
-    visibility: hidden;
-    position: absolute;
-  }
-}
-
 * {
   transition: color 60ms linear;
+  overscroll-behavior: none;
 }
 
 h1, h2, h3, p {
