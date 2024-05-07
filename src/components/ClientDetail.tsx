@@ -93,9 +93,9 @@ export default function ClientDetail() {
                         </div>
                     </div>}
                     {notes_cli && <><h1 className="my-1 font-bold">Notes</h1><SimpleEditor value={notes_cli} readOnly={true} /> </>}
-                    <div className="flex p-inputgroup">
-                        <BigButton className="flex-1 p-inputgroup-addon" text="Modifier le client" icon={faPenToSquare} onClick={() => { router.push(`/client/modifier?firebase_id=${firebase_id}`)}} />
-                        <BigButton className="w-fit p-inputgroup-addon bg-red-600 hover:bg-red-700" text="Supprimer" icon={faTrash} onClick={confirmSuppr} />
+                    <div className="flex gap-2">
+                        <BigButton className="" text="Modifier le client" icon={faPenToSquare} onClick={() => { router.push(`/client/modifier?firebase_id=${firebase_id}`)}} />
+                        <BigButton className="w-fit" text="Supprimer" icon={faTrash} onClick={confirmSuppr} outlined severity="danger"/>
                     </div>
                 </Card>
                 {coordinates && (
