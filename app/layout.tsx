@@ -1,24 +1,19 @@
 'use client'
 
 // CSS
-import '@fortawesome/fontawesome-svg-core/styles.css';
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "./globals.css";
-import { config } from '@fortawesome/fontawesome-svg-core';
+import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 
 // PrimeReact
-import { PrimeReactProvider } from 'primereact/api';
+import { PrimeReactProvider } from "primereact/api";
 
 // Components
-import BreadCrumb from '../src/components/BreadCrumb';
-import Menu from '../src/components/Menu';
-import Nay from '../src/components/NaySvg';
-
-// NextJs
-import { Gabarito } from "next/font/google";
-
-const gabarito = Gabarito({ subsets: ["latin"] });
+import BreadCrumb from "../src/components/BreadCrumb";
+import Menu from "../src/components/Menu";
+import Nay from "../src/components/NaySvg";
 
 export default function RootLayout({
   children,
@@ -33,18 +28,18 @@ export default function RootLayout({
               <script
                   dangerouslySetInnerHTML={{
                     __html: `
-                      const style = document.createElement('style')
-                      style.innerHTML = '@layer tailwind-base, primereact, tailwind-utilities;'
-                      style.setAttribute('type', 'text/css')
-                      document.querySelector('head').prepend(style)
+                      const style = document.createElement("style")
+                      style.innerHTML = "@layer tailwind-base, primereact, tailwind-utilities;"
+                      style.setAttribute("type", "text/css")
+                      document.querySelector("head").prepend(style)
                     `,
                   }}
                 />
         </head>
-          <body className={`h-screen w-full flex flex-row ${gabarito.className}`}>
+          <body className={"h-screen w-full flex flex-row"}>
             <aside className="h-full flex flex-col p-8 content-center gap-3 bg-nay-white">
               <Nay
-                className='w-16 mx-auto'
+                className="w-16 mx-auto"
                 // fill-nay-cyan-300
               />
               <Menu />
