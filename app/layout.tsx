@@ -45,7 +45,7 @@ export default function RootLayout({
               <Menu />
             </aside>
             <main className="h-screen w-full flex flex-col">
-              <header className="m-5">
+              <header className="p-4">
                 <BreadCrumb />
               </header>
               <main className="h-full w-full bg-gray-200 p-4 overflow-y-scroll">
