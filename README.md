@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hameau du Nay Gestion
 
-## Getting Started
+[En francais / in french](README-FR.md)
 
-First, run the development server:
+## Warning
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> [!WARNING]  
+> ❗This project is extremely specific to the [company](https://www.hameau-du-nay.fr) I am currently working for and is not a "plug and play" solution for other structures. I am making my code available so that others can benefit from the knowledge and skills I have acquired throughout the development of this application.❗
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## The project context
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+From 2003 to 2024, management (of files, clients, quotes, invoices, etc.) at the [accommodation center of Hameau du Nay](https://www.hameau-du-nay.fr) was done through Excel spreadsheets and a lot of "copy-paste" actions. My task was:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- to create a central software to reduce the number of repetitive tasks
+- to be able to automatically generate statistics based on the data
 
-## Learn More
+## Run the projet
 
-To learn more about Next.js, take a look at the following resources:
+1. Install [Node.js/npm](https://nodejs.org/en/download) and [Rust](https://www.rust-lang.org/tools/install).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Install dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    ```bash
+    npm install
+    ```
 
-## Deploy on Vercel
+3. Fill in the Firebase connection information from the [Firebase console](https://console.firebase.google.com) in `.env.local` following the `.env` template.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Launch the development server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```bash
+    npm run tauri dev
+    ```
+
+5. Build for production:
+
+    ```bash
+    npm run tauri build
+    ```
+
+## Émilia's note
+
+Hey there!
+Currently, this software operates with Firebase as its backend, but the long-term plan is to make it 100% independent, free, and open-source. I believe that if I am the one planning the migration from Firebase to something else, it will likely be towards [PocketBase](https://pocketbase.io), hosted on [PocketHost.io](https://pockethost.io) for a while, and then eventually on a local server.
