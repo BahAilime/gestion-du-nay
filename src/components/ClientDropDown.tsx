@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Dropdown } from 'primereact/dropdown';
 import { getClientsOnce } from "@/src/services/db";
+import Loading from "./Loading";
 
 export default function ClientDropDown({ onChange = (x: any) => x }) {
     const [selectedCli, setSelectedCli] = useState(null);
@@ -36,12 +37,10 @@ export default function ClientDropDown({ onChange = (x: any) => x }) {
     }, [])
 
     function groupedItemTemplate(option: any) {
-        return (
-            <p className="font-bold">{option.label}</p>
-        );
+        return <p className="font-bold">{option.label}</p>;
     };
 
-    if (!clients) return null
+    if (!clients) return <Loading text={"Chargement des clients..."} className="my-6"/>
 
     return <Dropdown
         value={selectedCli}
