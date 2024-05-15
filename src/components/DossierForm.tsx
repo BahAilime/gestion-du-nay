@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faHeart } from '@fortawesome/free-solid-svg-icons';
 import ClientForm from "./ClientForm";
 import ClientDropDown from "./ClientDropDown";
+import ReorderableParams from "./ReorderableParams";
 
 export default function DossierForm() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -18,10 +19,18 @@ export default function DossierForm() {
     return (
         <div className="flex flex-wrap gap-2">
             <Card title="Client" className="w-fit h-fit">
-            <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
-            {activeIndex === 0 && <ClientForm onChange={(clientInfos) => setData(clientInfos)} />}
-            {activeIndex === 1 && <ClientDropDown onChange={(client) => setData(client)} />}
-            {JSON.stringify(data)}
-        </Card>
+                <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
+                {activeIndex === 0 && <ClientForm onChange={(clientInfos) => setData(clientInfos)} />}
+                {activeIndex === 1 && <ClientDropDown onChange={(client) => setData(client)} />}
+                {JSON.stringify(data)}
+            </Card>
+
+            <Card title="Repas" className="w-fit h-fit">
+                <ReorderableParams rows={[
+                    { label: "Enfant", minVal: 0, maxVal: 17, qte: 0, unit: "ans" },
+                    { label: "Adulte", minVal: 18, maxVal: 99, qte: 0, unit: "ans" },
+                    ]} />
+            </Card>
+        </div>
     );
 }
