@@ -26,7 +26,7 @@ export default function ReorderableParamsRow({ label="", minVal=0, maxVal=0, uni
       }
     
     return (
-    <div className='w-[400px] flex gap-2 flex-row items-center justify-between bg-white rounded p-3 mx-auto my-2'>
+    <div className='w-[400px] flex gap-2 flex-row items-center justify-between bg-white rounded-xl p-3 mx-auto my-2 hover:border-nay-cyan-700 border-nay-cyan-900 border-2 border-solid'>
           <InputText
             className='border-none w-24'
             value={llabel}

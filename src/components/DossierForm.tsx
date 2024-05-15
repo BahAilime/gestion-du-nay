@@ -16,7 +16,8 @@ export default function DossierForm() {
     const [data, setData] = useState({});
 
     return (
-        <Card title="Client" className="min-w-1/2">
+        <div className="flex flex-wrap gap-2">
+            <Card title="Client" className="w-fit h-fit">
             <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
             {activeIndex === 0 && <ClientForm onChange={(clientInfos) => setData(clientInfos)} />}
             {activeIndex === 1 && <ClientDropDown onChange={(client) => setData(client)} />}
