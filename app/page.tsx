@@ -21,10 +21,10 @@ export default function Home() {
         {/* <ReorderableParamsRow label="Enfants" unit="ans" minVal={4} maxVal={7} qteBase={14} onChange={(x) => console.log(x)}/> */}
       {/* </div> */}
       <ReorderableParams rows={[
-        {label: "Enfants", minVal: 0, maxVal: 12, qte: 22, unit: "ans"},
-        {label: "Ado", minVal: 13, maxVal: 17, qte: 25, unit: "ans"},
-        {label: "Adulte", minVal: 18, maxVal: 99, qte: 7, unit: "ans"}
-        ]} />
+        {key:"1", label: "Enfants", minAge: 0, maxAge: 12, qte: 22},
+        {key:"2", label: "Ado", minAge: 13, maxAge: 17, qte: 25},
+        {key:"3", label: "Adulte", minAge: 18, maxAge: 99, qte: 7}
+        ]} onChange={(x) => console.log(x)}/>
     </>
   );
 }
