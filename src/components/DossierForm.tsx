@@ -14,22 +14,27 @@ export default function DossierForm() {
         { label: 'Déja venu', icon: <FontAwesomeIcon icon={faHeart} className="mr-2" /> },
     ];
 
-    const [data, setData] = useState({});
+    const [client, setClient] = useState();
+    const [nuit, setNuit] = useState({});
 
     return (
         <div className="flex flex-wrap gap-2">
             <Card title="Client" className="w-fit h-fit">
                 <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
-                {activeIndex === 0 && <ClientForm onChange={(clientInfos) => setData(clientInfos)} />}
-                {activeIndex === 1 && <ClientDropDown onChange={(client) => setData(client)} />}
-                {JSON.stringify(data)}
+                {activeIndex === 0 && <ClientForm onChange={(clientInfos) => setClient(clientInfos)} />}
+                {activeIndex === 1 && <ClientDropDown onChange={(client) => setClient(client)} />}
             </Card>
 
-            <Card title="Repas" className="w-fit h-fit">
+            <Card title="Nuités" className="w-fit h-fit">
                 <ReorderableParams rows={[
-                    { label: "Enfant", minVal: 0, maxVal: 17, qte: 0, unit: "ans" },
-                    { label: "Adulte", minVal: 18, maxVal: 99, qte: 0, unit: "ans" },
-                    ]} />
+                    {key: "enfant-key", label: "Enfant", minAge: 0, maxAge: 17 },
+                    {key: "adulte-key", label: "Adulte", minAge: 18, maxAge: 99 },
+                    ]} onChange={(nuit) => setNuit(nuit)} />
+            </Card>
+
+            <Card title="INFOS">
+                {JSON.stringify(client)}
+                {JSON.stringify(nuit)}
             </Card>
         </div>
     );

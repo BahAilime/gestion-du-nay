@@ -1,77 +1,81 @@
 import { InputNumber } from 'primereact/inputnumber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 
-export default function ReorderableParamsRow({ label="", minVal=0, maxVal=0, unit="", qteBase=0, onChange = (x: any) => x }) {
-    const [min, setMin] = useState(minVal);
-    const [max, setMax] = useState(maxVal);
-    const [qte, setQte] = useState(qteBase);
-    const [llabel, setLabel] = useState(label);
+import { Dropdown } from 'primereact/dropdown';
 
-    useEffect(() => {
-        onChange({ label, unit, min, max, qte })
-    }, [min, max, qte])
+export default function ReorderableParamsRow({key, label = "", minAge = 0, maxAge = 0, qteBase = 0, prixHt = 0, tvaBase = "", onChange = (x: any) => x }: { key: string, label?: string, minAge?: number, maxAge?: number, qteBase?: number, prixHt?: number, tvaBase?: string, onChange?: (x: any) => void }) {
+  const [min, setMin] = useState(minAge);
+  const [max, setMax] = useState(maxAge);
+  const [qte, setQte] = useState(qteBase);
+  const [llabel, setLabel] = useState(label);
+  const [open, setOpen] = useState(false);
+  const [ht, setHt] = useState(0);
+  const [tva, setTva] = useState(tvaBase);
+  const [tvaClean, setTvaClean] = useState(0);
+  const [prixTotal, setPrixTotal] = useState(0);
 
-    function enforceMinMax(e: any) {
-        if (e.value != "") {
-          if (parseInt(e.value) < parseInt(e.min)) {
-            e.value = e.min;
-          }
-          if (parseInt(e.value) > parseInt(e.max)) {
-            e.value = e.max;
-          }
-        }
-      }
-    
-    return (
-    <div className='w-[400px] flex gap-2 flex-row items-center justify-between bg-white rounded-xl p-3 mx-auto my-2 hover:border-nay-cyan-700 border-nay-cyan-900 border-2 border-solid'>
-          <InputText
-            className='border-none w-24'
-            value={llabel}
-            onChange={(e) => setLabel(e.target.value)}
-            tooltip='Nom'
-            tooltipOptions={{ position: 'top' }}
-          />
-        <div className='flex gap-2 items-center'>
-          <InputNumber
-              size={1}
-              min={0}
-              max={100}
-              value={min}
-              onValueChange={(e) => {if (e.value && e.value < max) setMin(e.value)}}
-              useGrouping={false}
-              onKeyUp={(e) => enforceMinMax(e)}
-              tooltip='Minimum'
-              tooltipOptions={{ position: 'top' }}
-              />
-          -
-          <InputNumber
-              size={1}
-              min={0}
-              max={100}
-              value={max}
-              onValueChange={(e) => {if (e.value && e.value > min) setMax(e.value)}}
-              useGrouping={false}
-              onKeyUp={(e) => enforceMinMax(e)}
-              tooltip='Maximum'
-              tooltipOptions={{ position: 'top' }}
-              />
-          {unit && <h1>{unit}</h1>}
-          <InputNumber
-              size={1}
-              min={0}
-              max={100}
-              value={qte}
-              onValueChange={(e) => {if (e.value) setQte(e.value)}}
-              useGrouping={false}
-              onKeyUp={(e) => enforceMinMax(e)}
-              tooltip='Quantité'
-              tooltipOptions={{ position: 'top' }}
-              />
-        <FontAwesomeIcon icon={faGripVertical} className="text-nay-cyan-200 cursor-ns-resize mx-3"/>
-      </div>
-    </div>
-    )
+  useEffect(() => {
+    setPrixTotal(Math.floor(ht * ((100 + tvaClean) / 100) * qte * 100) / 100)
+  }, [tvaClean, qte, ht])
+
+  useEffect(() => {
+    onChange({ key, label:llabel, min, max, qte, ht, tvaClean })
+  }, [llabel, min, max, qte, ht, tvaClean])
+
+  function sanitizeTVA(tva: string) {
+    setTva(tva)
+    if (tva == "") {
+      setTvaClean(0);
+      return;
+    }
+    tva = tva.replace(/,/g, '.');
+
+    setTvaClean(parseFloat(tva.replace(/[^0-9.]/g, '')));
   }
+
+  return (
+      <div className='w-[330px] flex gap-2 flex-col items-center justify-between bg-white rounded-xl p-3 mx-auto my-2 hover:border-nay-cyan-700 border-nay-cyan-900 border-2 border-solid'>
+        <div className='flex items-center gap-2'>
+          <h1>
+            {qte != 0 ? `${qte} ` : ""}
+            {llabel != "" ? llabel : "label"}
+            {prixTotal != 0 && `: ${prixTotal}€`}
+          </h1>
+          <FontAwesomeIcon icon={faGear} onClick={() => setOpen(!open)} className='text-nay-cyan-200' />
+          <FontAwesomeIcon icon={faGripVertical} className='text-nay-cyan-200' />
+        </div>
+        {open &&
+          <div className='h-fit w-64 flex gap-2 flex-col' >
+            <div className='flex justify-between items-center'>
+              <h1>Label:</h1>
+              <InputText className='w-40' placeholder="Label" value={llabel} onChange={e => setLabel(e.target.value)} />
+            </div>
+            <div className='flex justify-between items-center'>
+              <h1>Age:</h1>
+              <div className='flex gap-2 items-center'>
+                <InputNumber size={1} min={0} value={min} onChange={e => { if (e.value) setMin(e.value) }} />
+                -
+                <InputNumber size={1} min={0} value={max} onChange={e => { if (e.value) setMax(e.value) }} />
+                ans
+              </div>
+            </div>
+            <div className='flex justify-between items-center'>
+              <h1>Nombre de nuits:</h1>
+              <InputNumber size={1} min={0} value={qte} onChange={e => { if (e.value) setQte(e.value) }} />
+            </div>
+            <div className='flex justify-between items-center'>
+              <h1>Prix nuité HT:</h1>
+              <InputNumber size={1} min={0} value={ht} onChange={e => { if (e.value) setHt(e.value) }} useGrouping={false} minFractionDigits={0} maxFractionDigits={10} locale="fr-FR" />
+            </div>
+            <div className='flex justify-between items-center'>
+              <h1>TVA:</h1>
+              <Dropdown className='dropdown-tva' size={1} value={tva} onChange={(e) => sanitizeTVA(e.value)} options={[{ name: "0%", value: "0" }, { name: "5,5%", value: "5.5" }, { name: "10%", value: "10" }, { name: "20%", value: "20" }]} optionLabel="name" optionValue='value' editable placeholder="TVA" />
+            </div>
+          </div>
+        }
+      </div>
+  )
+}
