@@ -22,7 +22,6 @@ export default function ClientForm({ dataImport={}, onChange = (x: any) => {x} }
 
     useEffect(() => {
         onChange(data)
-        console.log(data);
     }, [data, onChange])
 
     // TODO: rendre ca configurable
