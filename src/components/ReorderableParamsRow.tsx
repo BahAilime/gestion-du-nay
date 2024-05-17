@@ -22,12 +22,12 @@ export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixH
   }, [])
 
   useEffect(() => {
-    setPrixTotal(Math.floor(ht * ((100 + tvaClean) / 100) * qte * 100) / 100)
-  }, [tvaClean, qte, ht])
+    setPrixTotal(Math.floor((ht * ((100 + tvaClean) / 100) * qte - remise) * 100) / 100)
+  }, [tvaClean, qte, ht, remise])
 
   useEffect(() => {
-    onChange({ id, label:llabel, qte, prixHt:ht, tva, remiseBase:remise })
-  }, [llabel, qte, ht, tvaClean])
+    onChange({ key:id, label:llabel, qte, prixHt:ht, tva, remiseBase:remise })
+  }, [llabel, prixTotal])
 
   function sanitizeTVA(tva: string) {
     setTva(tva)
