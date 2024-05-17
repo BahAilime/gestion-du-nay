@@ -6,7 +6,7 @@ import { InputText } from 'primereact/inputtext';
 
 import { Dropdown } from 'primereact/dropdown';
 
-export default function ReorderableParamsRow({key, label = "", minAge = 0, maxAge = 0, qteBase = 0, prixHt = 0, tvaBase = "", onChange = (x: any) => x }: { key: string, label?: string, minAge?: number, maxAge?: number, qteBase?: number, prixHt?: number, tvaBase?: string, onChange?: (x: any) => void }) {
+export default function ReorderableParamsRow({id, label = "", minAge = 0, maxAge = 0, qteBase = 0, prixHt = 0, tvaBase = "", onChange = (x: any) => x }: { id: string, label?: string, minAge?: number, maxAge?: number, qteBase?: number, prixHt?: number, tvaBase?: string, onChange?: (x: any) => void }) {
   const [min, setMin] = useState(minAge);
   const [max, setMax] = useState(maxAge);
   const [qte, setQte] = useState(qteBase);
@@ -22,7 +22,7 @@ export default function ReorderableParamsRow({key, label = "", minAge = 0, maxAg
   }, [tvaClean, qte, ht])
 
   useEffect(() => {
-    onChange({ key, label:llabel, min, max, qte, ht, tvaClean })
+    onChange({ id, label:llabel, min, max, qte, ht, tvaClean })
   }, [llabel, min, max, qte, ht, tvaClean])
 
   function sanitizeTVA(tva: string) {
@@ -40,8 +40,10 @@ export default function ReorderableParamsRow({key, label = "", minAge = 0, maxAg
       <div className='w-[330px] flex gap-2 flex-col items-center justify-between bg-white rounded-xl p-3 mx-auto my-2 hover:border-nay-cyan-700 border-nay-cyan-900 border-2 border-solid'>
         <div className='flex items-center gap-2'>
           <h1>
-            {qte != 0 ? `${qte} ` : ""}
-            {llabel != "" ? llabel : "label"}
+            {qte != 0 ?
+              qte > 1 ? `${qte} nuitées ` : `${qte} nuitée `
+              : ""}
+            {llabel != "" ? `"${llabel.toLowerCase()}"` : "Tranche d'âge sans nom"} 
             {prixTotal != 0 && `: ${prixTotal}€`}
           </h1>
           <FontAwesomeIcon icon={faGear} onClick={() => setOpen(!open)} className='text-nay-cyan-200' />
@@ -56,19 +58,19 @@ export default function ReorderableParamsRow({key, label = "", minAge = 0, maxAg
             <div className='flex justify-between items-center'>
               <h1>Age:</h1>
               <div className='flex gap-2 items-center'>
-                <InputNumber size={1} min={0} value={min} onChange={e => { if (e.value) setMin(e.value) }} />
+                <InputNumber size={1} min={0} value={min} onChange={e => { if (e.value) setMin(e.value); else setMin(0) }} />
                 -
-                <InputNumber size={1} min={0} value={max} onChange={e => { if (e.value) setMax(e.value) }} />
+                <InputNumber size={1} min={0} value={max} onChange={e => { if (e.value) setMax(e.value); else setMax(0) }} />
                 ans
               </div>
             </div>
             <div className='flex justify-between items-center'>
               <h1>Nombre de nuits:</h1>
-              <InputNumber size={1} min={0} value={qte} onChange={e => { if (e.value) setQte(e.value) }} />
+              <InputNumber size={1} min={0} value={qte} onChange={e => { if (e.value) setQte(e.value); else setQte(0) }} />
             </div>
             <div className='flex justify-between items-center'>
               <h1>Prix nuité HT:</h1>
-              <InputNumber size={1} min={0} value={ht} onChange={e => { if (e.value) setHt(e.value) }} useGrouping={false} minFractionDigits={0} maxFractionDigits={10} locale="fr-FR" />
+              <InputNumber size={1} min={0} value={ht} onChange={e => { if (e.value) setHt(e.value); else setHt(0) }} useGrouping={false} minFractionDigits={0} maxFractionDigits={10} locale="fr-FR" />
             </div>
             <div className='flex justify-between items-center'>
               <h1>TVA:</h1>

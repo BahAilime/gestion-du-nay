@@ -14,7 +14,7 @@ export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: 
     return (
         <div className="border-nay-cyan-500 rounded-xl border-solid border-2 p-3">
             {items.map((item, index) => (
-                    <ReorderableParamsRow key={item.key} label={item.label} minAge={item.minAge} maxAge={item.maxAge} qteBase={item.qte} prixHt={item.prixHt} tvaBase={item.tva} onChange={(x) => {
+                        <ReorderableParamsRow key={item.key} id={item.key} label={item.label} minAge={item.minAge} maxAge={item.maxAge} qteBase={item.qte} prixHt={item.prixHt} tvaBase={item.tva} onChange={(x) => {
                         let ohItems = [...items]
                         ohItems[index] = x
                         setItems(ohItems)
