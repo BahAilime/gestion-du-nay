@@ -61,3 +61,7 @@ h1, h2, h3, p {
 .dropdown-tva input {
   width: 90px;
 }
+
+.servi .p-component {
+  padding: 10px;
+}
