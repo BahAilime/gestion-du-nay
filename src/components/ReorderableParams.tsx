@@ -13,15 +13,19 @@ export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: 
 
     return (
         <div className="border-nay-cyan-500 rounded-xl border-solid border-2 p-3">
-            {items.map((item, index) => (
+            <Reorder.Group values={items} onReorder={setItems}>
+                {items.map((item, index) => (
+                    <Reorder.Item key={item.key} value={item}>
                         <ReorderableParamsRow key={item.key} id={item.key} label={item.label} minAge={item.minAge} maxAge={item.maxAge} qteBase={item.qte} prixHt={item.prixHt} tvaBase={item.tva} onChange={(x) => {
-                        let ohItems = [...items]
-                        ohItems[index] = x
-                        setItems(ohItems)
-                    }
-                    }/>
-            ))}
-            {/* <BigButton text="Ajouter une ligne" icon={faPlusCircle} onClick={() => setItems([...items, { label: "", minVal: 0, maxVal: 0, qte: 0, unit: "ans" }])}/> */}
+                            let ohItems = [...items]
+                            ohItems[index] = x
+                            setItems(ohItems)
+                        }
+                        }/>
+                    </Reorder.Item>
+                ))}
+            </Reorder.Group>
+            <BigButton text="Ajouter une tranche d'âge" icon={faPlusCircle} onClick={() => setItems([...items, { key: (items.length + 1).toString(), label: "Nouvelle tranche d'âge" }])}/>
         </div>
     )
 }
