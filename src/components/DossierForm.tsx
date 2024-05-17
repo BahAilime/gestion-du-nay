@@ -6,6 +6,7 @@ import { faPlus, faHeart } from '@fortawesome/free-solid-svg-icons';
 import ClientForm from "./ClientForm";
 import ClientDropDown from "./ClientDropDown";
 import ReorderableParams from "./ReorderableParams";
+import Debug from "./Debug";
 
 export default function DossierForm() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -32,10 +33,18 @@ export default function DossierForm() {
                     ]} onChange={(nuit) => setNuit(nuit)} />
             </Card>
 
-            <Card title="INFOS">
-                {JSON.stringify(client)}
-                {JSON.stringify(nuit)}
-            </Card>
+            <Debug>
+                <Card title="INFOS">
+                    <h1>
+                        Client:
+                        {JSON.stringify(client)}
+                    </h1>
+                    <h1>
+                        Nuit:
+                        {JSON.stringify(nuit)}
+                    </h1>
+                </Card>
+            </Debug>
         </div>
     );
 }
