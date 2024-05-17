@@ -4,7 +4,7 @@ import ReorderableParamsRow from "./ReorderableParamsRow"
 import BigButton from "./BigButton"
 import { faCircleXmark, faPenToSquare, faPlusCircle } from "@fortawesome/free-solid-svg-icons"
 
-export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: { rows: {key: string, label?: string, minAge?: number, maxAge?: number, qte?: number, prixHt?: number, tva?: string}[], onChange: (x: any) => void }) {
+export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: { rows: {key: string, label?: string, qte?: number, prixHt?: number, tva?: string, remise?: number}[], onChange: (x: any) => void }) {
     const [items, setItems] = useState(rows)
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: 
             <Reorder.Group values={items} onReorder={setItems}>
                 {items.map((item, index) => (
                     <Reorder.Item key={item.key} value={item}>
-                        <ReorderableParamsRow key={item.key} id={item.key} label={item.label} minAge={item.minAge} maxAge={item.maxAge} qteBase={item.qte} prixHt={item.prixHt} tvaBase={item.tva} onChange={(x) => {
+                        <ReorderableParamsRow key={item.key} id={item.key} label={item.label} qteBase={item.qte} prixHt={item.prixHt} tvaBase={item.tva} remiseBase={item.remise} onChange={(x) => {
                             let ohItems = [...items]
                             ohItems[index] = x
                             setItems(ohItems)
