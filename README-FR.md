@@ -39,6 +39,24 @@ De 2003 à 2024, la gestion (des dossiers, des clients, des devis, factures, etc
     npm run tauri build
     ```
 
+## Pour vous aider pendant le développement
+
+J'ai créé quelques composants et fait des ajustements pour vous aider dans le processus de développement.
+
+1. Dans MenuSection.tsx, vous pouvez définir la prop "type" sur DEV ou WIP lorsque vous travaillez sur le développement, et sur PROD lorsque vous êtes prêt.
+    - DEV signifie qu'il est uniquement utilisé en développement et ne sera jamais public.
+    - WIP signifie que la route sera éventuellement publique, mais qu'elle n'est pas encore prête.
+    - PROD signifie que la route est prête et sera accessible dans la version de production.
+
+    - ```html
+        <MenuSection text="Tests" type="DEV">
+            <MenuItem text="Carte" url="/test/map"/>
+            <MenuItem text="Carte + hook" url="/test/maphook"/>
+        </MenuSection>
+        ```
+
+1. Le composant Debug et ses enfants ne seront pas rendus dans l'environnement de production.
+
 ## Notes d'Émilia
 
 Salut !

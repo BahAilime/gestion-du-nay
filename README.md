@@ -38,6 +38,24 @@ From 2003 to 2024, management (of files, clients, quotes, invoices, etc.) at the
     npm run tauri build
     ```
 
+## To help you during development
+
+I have made a few components and adjustments to help you in the development process.
+
+1. In MenuSection.tsx, you can set the "type" prop to be DEV or WIP when you are working on the development and PROD when you are ready
+    - DEV means that it is only used in dev and will never be public
+    - WIP means that the route will eventually be public, but it is not yet ready
+    - PROD means that the route is ready and will be reachable in the production build
+
+    - ```html
+        <MenuSection text="Tests" type="DEV">
+            <MenuItem text="Carte" url="/test/map"/>
+            <MenuItem text="Carte + hook" url="/test/maphook"/>
+        </MenuSection>
+        ```
+
+1. The Debug component and its children won't render in production env
+
 ## Émilia's note
 
 Hey there!
