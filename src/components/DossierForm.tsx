@@ -9,6 +9,7 @@ import ReorderableParams from "./ReorderableParams";
 import Debug from "./Debug";
 import { InputNumber } from "primereact/inputnumber";
 import { ToggleButton } from "primereact/togglebutton";
+import CustomLineGroup from "./CustomLineGroup";
 
 export default function DossierForm() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -45,6 +46,14 @@ export default function DossierForm() {
                 <div className="flex flex-row gap-2 items-center my-2">
                     Repas et petit dej servi:
                     <ToggleButton className="servi" checked={repas.servi} onChange={(e) => setRepas({...repas, servi: e.value})} onLabel="Oui" offLabel="Non" />
+                    <CustomLineGroup
+                        rows={[
+                            {key: "tranches", label: "Tranches", qte: 0, prixHt: 0, tva: "20", remise: 0},
+                            {key: "boissons", label: "Boissons", qte: 0, prixHt: 0, tva: "20", remise: 0},
+                            {key: "sweets", label: "Sweets", qte: 0, prixHt: 0, tva: "20", remise: 0},
+                        ]}
+                        onChange={(e) => setRepas({...repas, tranches: e})}
+                    />
                 </div>
             </Card>
 
