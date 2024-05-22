@@ -1,12 +1,13 @@
 import { InputNumber } from 'primereact/inputnumber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faGear, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 
 import { Dropdown } from 'primereact/dropdown';
+import BigButton from './BigButton';
 
-export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixHt = 0, tvaBase = "", remiseBase = 0, handle = null, onChange = (x: any) => x }: { id: string, label?: string, qteBase?: number, prixHt?: number, tvaBase?: string, remiseBase?: number, handle?: any, onChange?: (x: any) => void }) {
+export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixHt = 0, tvaBase = "", remiseBase = 0, handle = null, onChange = (x: any) => x }: { id: string, label?: string, qteBase?: number, prixHt?: number, tvaBase?: string, remiseBase?: number, handle?: any, onChange?: (x: any|"delete") => void }) {
   // TODO: Refactor les useState
   const [qte, setQte] = useState(qteBase);
   const [llabel, setLabel] = useState(label);
@@ -79,6 +80,7 @@ export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixH
                 <InputNumber className='text-right' size={6} min={0} value={remise} onChange={e => { if (e.value) setRemise(e.value); else setRemise(0) }} useGrouping={false} minFractionDigits={0} maxFractionDigits={10} locale="fr-FR" /> €
               </div>
             </div>
+            <BigButton text="Supprimer" icon={faCircleXmark} onClick={() => {onChange("delete")}} severity='danger' outlined={true} />
           </div>
         }
       </div>
