@@ -15,6 +15,21 @@ import BreadCrumb from "../src/components/BreadCrumb";
 import Menu from "../src/components/Menu";
 import Nay from "../src/components/NaySvg";
 
+// i18n
+
+import { locale, addLocale } from 'primereact/api';
+addLocale('fr', {
+  firstDayOfWeek: 1,
+  dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+  dayNamesShort: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
+  dayNamesMin: ['DI', 'LU', 'MA', 'ME', 'JE', 'VE', 'SA'],
+  monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre'],
+  monthNamesShort: ['jan', 'fev', 'mar', 'avr', 'mai', 'jui', 'juil', 'aou', 'sep', 'oct', 'nov', 'dec'],
+  today: 'Aujourd\'hui',
+  clear: 'Effacer',
+});
+locale('fr')
+
 export default function RootLayout({
   children,
 }: Readonly<{
