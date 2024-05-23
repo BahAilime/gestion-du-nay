@@ -124,3 +124,25 @@ export function newDossier(data:dossier, callback: (client: DatabaseReference) =
             callback(newDos)
         })
 }
+
+export function getDossiersOnce(): Promise<dossier[]> {
+    return get(query(dossierRef, orderByChild("lastSeen")))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                const dossiers: any[] = []
+                snapshot.forEach((snapDossier) => {
+                    let snapDossierClient = snapDossier.val()
+                    getClientOnce(snapDossier.val().idClient).then((client) => {
+                        snapDossierClient.client = client
+                        dossiers.push({...snapDossierClient, firebase_id: snapDossier.key});
+                    })
+                });
+                return dossiers.reverse();
+            } else {
+                return [];
+            }
+        }).catch((error) => {
+            console.warn("DB getDossierOnce:", error);
+            return [];
+        });
+}
