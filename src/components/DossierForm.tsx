@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from 'primereact/card';
 import { TabMenu } from 'primereact/tabmenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faHeart, faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import ClientForm from "./ClientForm";
 import ClientDropDown from "./ClientDropDown";
 import ReorderableParams from "./ReorderableParams";
@@ -11,6 +11,8 @@ import { InputNumber } from "primereact/inputnumber";
 import { ToggleButton } from "primereact/togglebutton";
 import CustomLineGroup from "./CustomLineGroup";
 import { Calendar } from "primereact/calendar";
+import BigButton from "./BigButton";
+import { newClient, newDossier, client, line } from "@/src/services/db";
 
 // TODO: rendre ca configurable
 
@@ -22,12 +24,12 @@ export default function DossierForm() {
     ];
 
     const [infos, setInfos] = useState<{debut?: Date, fin?: Date, adultes?: number, enfants?: number, nuits?: number}>({});
-    const [client, setClient] = useState();
-    const [nuit, setNuit] = useState({});
+    const [client, setClient] = useState<client|string>();
+    const [nuit, setNuit] = useState<line[]>();
     const [drap, setDrap] = useState(0);
-    const [repas, setRepas] = useState<{servi:boolean, tranches?: any}>({servi: true});
-    const [activite, setActivite] = useState({});
-    const [divers, setDivers] = useState({});
+    const [repas, setRepas] = useState<{servi:boolean, lines?: any}>({servi: true});
+    const [activite, setActivite] = useState<line[]>();
+    const [divers, setDivers] = useState<line[]>();
 
     return (
         <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-flow-dense gap-2">
@@ -46,11 +48,11 @@ export default function DossierForm() {
             <Card className="w-full h-full" title="Informations sur le séjour">
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Nombre d'adultes:</p>
-                    <InputNumber value={infos.adultes} onValueChange={(e) => setNuit({...infos, adulte: e.value})} />
+                    <InputNumber value={infos.adultes} onValueChange={(e) => setInfos({...infos, adultes: (e.value ? e.value : undefined)})} />
                 </div>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Nombre d'enfants:</p>
-                    <InputNumber value={infos.enfants} onValueChange={(e) => setNuit({...infos, enfants: e.value})} />
+                    <InputNumber value={infos.enfants} onValueChange={(e) => setInfos({...infos, enfants: (e.value ? e.value : undefined)})} />
                 </div>
                 <h1 className="text-xl font-medium">Dates</h1>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
@@ -88,7 +90,7 @@ export default function DossierForm() {
                         {key: "piquenique", label: "Pique-nique indiv. enfant et adulte", qte: 0, prixHt: 0, tva: "10", remise: 0},
                         {key: "gouter", label: "Goûter enfant et adulte", qte: 0, prixHt: 0, tva: "5.5", remise: 0}
                     ]}
-                    onChange={(e) => setRepas({...repas, tranches: e})}
+                    onChange={(e) => setRepas({...repas, lines: e})}
                 />
             </Card>
 
@@ -116,6 +118,32 @@ export default function DossierForm() {
 
             <Card className="w-full h-full" title="Valier">
                 {/* btn de validation du form */}
+                <BigButton text="Valider" icon={faSquareCheck} onClick={() => {
+                    if (client) {
+                        let clientID = "";
+                        if (typeof client == "string") {
+                            clientID = client;
+                        } else {
+                            newClient(client, (client) => {
+                                if (client.key) {
+                                    clientID = client.key
+                                }
+                            });
+                        }
+                        newDossier({
+                            idClient: clientID,
+                            nuits: {
+                                drap,
+                                lines: nuit
+                            },
+                            activite,
+                            repas,
+                            divers
+                        }, (dossier) => {
+                            console.log(dossier);
+                        })
+                    }
+                }} />
             </Card>
 
             <Debug>
