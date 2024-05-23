@@ -117,31 +117,44 @@ export default function DossierForm() {
             </Card>
 
             <Card className="w-full h-full" title="Valier">
-                {/* btn de validation du form */}
+                {/* TODO: refactor */}
                 <BigButton text="Valider" icon={faSquareCheck} onClick={() => {
                     if (client) {
                         let clientID = "";
                         if (typeof client == "string") {
                             clientID = client;
+                            newDossier({
+                                idClient: clientID,
+                                nuits: {
+                                    drap,
+                                    lines: nuit
+                                },
+                                activite,
+                                repas,
+                                divers
+                            }, (dossier) => {
+                                console.log(dossier);
+                            })
                         } else {
                             newClient(client, (client) => {
                                 if (client.key) {
                                     clientID = client.key
+                                    newDossier({
+                                        idClient: clientID,
+                                        nuits: {
+                                            drap,
+                                            lines: nuit
+                                        },
+                                        activite,
+                                        repas,
+                                        divers
+                                    }, (dossier) => {
+                                        console.log(dossier);
+                                    })
                                 }
                             });
                         }
-                        newDossier({
-                            idClient: clientID,
-                            nuits: {
-                                drap,
-                                lines: nuit
-                            },
-                            activite,
-                            repas,
-                            divers
-                        }, (dossier) => {
-                            console.log(dossier);
-                        })
+                        
                     }
                 }} />
             </Card>
