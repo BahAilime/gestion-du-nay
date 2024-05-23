@@ -115,3 +115,12 @@ export function deleteClient(id: number|string, callback: () => void) {
             }
         })
     }
+
+
+export function newDossier(data:dossier, callback: (client: DatabaseReference) => void) {
+    data.lastSeen = serverTimestamp()
+    push(dossierRef, data)
+        .then((newDos) => {
+            callback(newDos)
+        })
+}
