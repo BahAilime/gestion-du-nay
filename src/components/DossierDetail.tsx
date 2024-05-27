@@ -14,6 +14,9 @@ import BigButton from "../components/BigButton";
 import { dossier } from "../services/db";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { format, fromUnixTime } from "date-fns";
+
+import { Accordion, AccordionTab } from 'primereact/accordion';
 
 export default function ClientDetail() {
     const [dossier, setDossier] = useState<dossier>()
@@ -73,7 +76,11 @@ export default function ClientDetail() {
         if (!dossier || !dossier.infos || !dossier.infos.debut || !dossier.infos.fin) {
             return "Dossier"
         } else {
-            return `Séjour du ${dossier?.infos.debut} au ${dossier?.infos.fin}`
+            if (typeof dossier.infos.debut === 'number') {
+                const deb = format(fromUnixTime(dossier.infos.debut), "dd/MM/yyyy")
+                const fin = format(dossier.infos.fin, "dd/MM/yyyy")
+                return `Séjour du ${deb} au ${fin}`
+            }
         }
     }
 
@@ -82,31 +89,54 @@ export default function ClientDetail() {
     }
 
     return (
-        <div className="w-full h-full grid grid-cols-2 grid-rows-1">
-            <Card title={titre()} className="flex-1 overflow-y-auto">
-                {dossier?.nuits?.lines && dossier.nuits.lines.map((nuit, i) => {
-                    if (typeof nuit.qte !== 'number'
-                    || typeof nuit.prixHt !== 'number'
-                    || typeof nuit.tva !== 'number') {
-                        return <div key={i}>{nuit.label}: {nuit.qte}</div>
-                    }
-                    else {
-                        return <div key={i}>{nuit.label}: {nuit.qte} ({calcPrice(nuit.qte, nuit.prixHt, nuit.tva)})</div>
-                    }
-                })}
-
-                <DataTable value={dossier?.nuits?.lines}>
-                    <Column field="label" header="Ligne"></Column>
-                    <Column field="qte" header="Qte"></Column>
-                    <Column field="prixHt" header="Prix HT"></Column>
-                    <Column field="tva" header="TVA"></Column>
-                </DataTable>
-
-                <BigButton className="" text="Supprimer ce dossier" icon={faUser} onClick={confirmSuppr} />
-
-
+        <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-2">
+            <Card title={titre()} className="overflow-y-auto col-span-2">
+                <div className="flex flex-col gap-2">
+                    <Accordion>
+                        <AccordionTab header="Nuits">
+                            <DataTable value={dossier?.nuits?.lines} size="small" emptyMessage="Pas de nuits">
+                                <Column field="label" header="Type"></Column>
+                                <Column field="qte" header="Qte"></Column>
+                                <Column field="prixHt" header="Prix HT"></Column>
+                                <Column field="tva" header="TVA"></Column>
+                                <Column field="remise" header="Remise"></Column>
+                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)+"€"} header="Total"></Column>
+                            </DataTable>
+                        </AccordionTab>
+                        <AccordionTab header="Repas">
+                            <DataTable value={dossier?.repas?.lines} size="small" emptyMessage="Pas de repas">
+                                <Column field="label" header="Type"></Column>
+                                <Column field="qte" header="Qte"></Column>
+                                <Column field="prixHt" header="Prix HT"></Column>
+                                <Column field="tva" header="TVA"></Column>
+                                <Column field="remise" header="Remise"></Column>
+                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)} header="Total"></Column>
+                            </DataTable>
+                        </AccordionTab>
+                        <AccordionTab header="Activités">
+                            <DataTable value={dossier?.activite} size="small" emptyMessage="Pas d'activités">
+                                <Column field="label" header="Nom"></Column>
+                                <Column field="qte" header="Qte"></Column>
+                                <Column field="prixHt" header="Prix HT"></Column>
+                                <Column field="tva" header="TVA"></Column>
+                                <Column field="remise" header="Remise"></Column>
+                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)+"€"} header="Total"></Column>
+                            </DataTable>
+                        </AccordionTab>
+                        <AccordionTab header="Autre">
+                            <DataTable value={dossier?.divers} size="small" emptyMessage="Rien d'autre">
+                                <Column field="label" header="Nom"></Column>
+                                <Column field="qte" header="Qte"></Column>
+                                <Column field="prixHt" header="Prix HT"></Column>
+                                <Column field="tva" header="TVA"></Column>
+                                <Column field="remise" header="Remise"></Column>
+                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)+"€"} header="Total"></Column>
+                            </DataTable>
+                        </AccordionTab>
+                    </Accordion>
+                    <BigButton className="" text="Supprimer ce dossier" icon={faUser} onClick={confirmSuppr} />
+                </div>
             </Card>
-
             {cardClient}
         </div>
     );
