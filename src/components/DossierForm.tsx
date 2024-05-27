@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from 'primereact/card';
 import { TabMenu } from 'primereact/tabmenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +13,7 @@ import CustomLineGroup from "./CustomLineGroup";
 import { Calendar } from "primereact/calendar";
 import BigButton from "./BigButton";
 import { newClient, newDossier, client, line } from "@/src/services/db";
+import { differenceInDays } from 'date-fns';
 
 // TODO: rendre ca configurable
 
@@ -23,13 +24,19 @@ export default function DossierForm() {
         { label: 'Déja venu', icon: <FontAwesomeIcon icon={faHeart} className="mr-2" /> },
     ];
 
-    const [infos, setInfos] = useState<{debut?: Date, fin?: Date, adultes?: number, enfants?: number, nuits?: number}>({});
+    const [infos, setInfos] = useState<{debut?: Date, fin?: Date, adultes?: number, enfants?: number, nuits?: number}>({enfants: 0, adultes: 0});
     const [client, setClient] = useState<client|string>();
     const [nuit, setNuit] = useState<line[]>();
     const [drap, setDrap] = useState(0);
     const [repas, setRepas] = useState<{servi:boolean, lines?: any}>({servi: true});
     const [activite, setActivite] = useState<line[]>();
     const [divers, setDivers] = useState<line[]>();
+
+    useEffect(() => {
+        if (infos.debut && infos.fin) {
+            setInfos({...infos, nuits: differenceInDays(infos.fin, infos.debut)});
+        }
+    }, [infos.debut, infos.fin])
 
     return (
         <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-flow-dense gap-2">
@@ -48,11 +55,11 @@ export default function DossierForm() {
             <Card className="w-full h-full" title="Informations sur le séjour">
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Nombre d'adultes:</p>
-                    <InputNumber value={infos.adultes} onValueChange={(e) => setInfos({...infos, adultes: (e.value ? e.value : undefined)})} />
+                    <InputNumber value={infos.adultes} onValueChange={(e) => setInfos({...infos, adultes: (e.value ? e.value : 0)})} />
                 </div>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Nombre d'enfants:</p>
-                    <InputNumber value={infos.enfants} onValueChange={(e) => setInfos({...infos, enfants: (e.value ? e.value : undefined)})} />
+                    <InputNumber value={infos.enfants} onValueChange={(e) => setInfos({...infos, enfants: (e.value ? e.value : 0)})} />
                 </div>
                 <h1 className="text-xl font-medium">Dates</h1>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
@@ -62,6 +69,10 @@ export default function DossierForm() {
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Jour du départ:</p>
                     <Calendar dateFormat="dd/mm/yy" showButtonBar  value={infos.fin} onChange={(e) => {if (e.value) setInfos({...infos, fin: e.value}); else setInfos({...infos, fin: undefined})}} />
+                </div>
+                <div className="flex flex-row gap-2 items-center my-2 justify-between">
+                    <p>Nombre de nuits:</p>
+                    {infos.nuits && infos.nuits}
                 </div>
             </Card>
 
@@ -125,6 +136,7 @@ export default function DossierForm() {
                             clientID = client;
                             newDossier({
                                 idClient: clientID,
+                                infos,
                                 nuits: {
                                     drap,
                                     lines: nuit
@@ -141,6 +153,7 @@ export default function DossierForm() {
                                     clientID = client.key
                                     newDossier({
                                         idClient: clientID,
+                                        infos,
                                         nuits: {
                                             drap,
                                             lines: nuit
