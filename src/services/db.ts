@@ -173,3 +173,17 @@ export async function getDossiersOnce(): Promise<dossier[]> {
         return [];
     }
 }
+
+export function getDossierOnce(id: number|string): Promise<dossier> {
+    return get(child(dossierRef, `${id}`))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                update(snapshot.ref, {lastSeen: serverTimestamp()})
+                return snapshot.val();
+            } else {
+                return {};
+            }
+        }).catch((error) => {
+            console.warn("DB getDossierOnce:", error);
+        });
+}
