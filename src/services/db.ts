@@ -174,16 +174,18 @@ export async function getDossiersOnce(): Promise<dossier[]> {
     }
 }
 
-export function getDossierOnce(id: number|string): Promise<dossier> {
-    return get(child(dossierRef, `${id}`))
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                update(snapshot.ref, {lastSeen: serverTimestamp()})
-                return snapshot.val();
-            } else {
-                return {};
-            }
-        }).catch((error) => {
-            console.warn("DB getDossierOnce:", error);
-        });
+export async function getDossierOnce(id: number | string): Promise<dossier> {
+    const snapDossier = await get(child(dossierRef, `${id}`));
+
+    if (snapDossier.exists()) {
+        const dossier: dossier = snapDossier.val();
+        await update(snapDossier.ref, { lastSeen: serverTimestamp() });
+
+        const clientData = await getClientOnce(dossier.idClient);
+        dossier.client = clientData;
+
+        return dossier
+    } else {
+        throw new Error("Dossier introuvable");
+    }
 }
