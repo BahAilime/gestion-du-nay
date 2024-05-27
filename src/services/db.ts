@@ -1,4 +1,5 @@
 import { db } from "@/src/services/firebase";
+import { fromUnixTime, getUnixTime } from "date-fns";
 import { ref, child, get, onValue, push, update, remove, serverTimestamp, query, orderByChild, DatabaseReference} from "firebase/database";
 
 export type client = {
@@ -25,6 +26,14 @@ export type line = {
 
 export type dossier = {
     idClient: string,
+    client?: client,
+    infos?: {
+        debut?: Date|number,
+        fin?: Date|number,
+        adultes?: number,
+        enfants?: number,
+        nuits?: number
+    }
     nuits?: {
         drap?: number,
         lines?: line[]},
@@ -34,7 +43,8 @@ export type dossier = {
     },
     activite?: line[],
     divers?: line[],
-    lastSeen?: any;
+    lastSeen?: any,
+    firebase_id?: string
 }
 
 const clientsRef = ref(db, "client");
@@ -119,30 +129,47 @@ export function deleteClient(id: number|string, callback: () => void) {
 
 export function newDossier(data:dossier, callback: (client: DatabaseReference) => void) {
     data.lastSeen = serverTimestamp()
+    if (data.infos?.debut) {
+        data.infos.debut = getUnixTime(data.infos.debut)
+    }
+    if (data.infos?.fin) {
+        data.infos.fin = getUnixTime(data.infos?.fin)
+    }
+
     push(dossierRef, data)
         .then((newDos) => {
             callback(newDos)
         })
 }
 
-export function getDossiersOnce(): Promise<dossier[]> {
-    return get(query(dossierRef, orderByChild("lastSeen")))
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                const dossiers: any[] = []
-                snapshot.forEach((snapDossier) => {
-                    let snapDossierClient = snapDossier.val()
-                    getClientOnce(snapDossier.val().idClient).then((client) => {
-                        snapDossierClient.client = client
-                        dossiers.push({...snapDossierClient, firebase_id: snapDossier.key});
-                    })
-                });
-                return dossiers.reverse();
-            } else {
-                return [];
-            }
-        }).catch((error) => {
-            console.warn("DB getDossierOnce:", error);
+export async function getDossiersOnce(): Promise<dossier[]> {
+    try {
+        const snapshot = await get(query(dossierRef, orderByChild("lastSeen")));
+        if (!snapshot.exists()) {
             return [];
+        }
+
+        const dossiersPromises: Promise<dossier>[] = [];
+        snapshot.forEach((snapDossier) => {
+            let dossier: dossier = snapDossier.val();
+            const dossierPromise = getClientOnce(dossier.idClient)
+                .then((client) => {
+                    const dossierComplet: dossier = { ...dossier, client, firebase_id: snapDossier.key };
+                    if (typeof dossier.infos?.debut == "number") {
+                        dossier.infos.debut = fromUnixTime(dossier.infos.debut)
+                    }
+                    if (typeof dossier.infos?.fin == "number") {
+                        dossier.infos.fin = fromUnixTime(dossier.infos?.fin)
+                    }
+                    return dossierComplet;
+                });
+            dossiersPromises.push(dossierPromise);
         });
+
+        const dossiers = await Promise.all(dossiersPromises);
+        return dossiers.reverse();
+    } catch (error) {
+        console.warn("DB getDossiersOnce:", error);
+        return [];
+    }
 }
