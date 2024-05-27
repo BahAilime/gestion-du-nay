@@ -7,7 +7,7 @@ export type client = {
     resp_cli?: string;
     email_cli?: string;
     tel_cli?: string;
-    adresse_cli?: string;
+    adr_cli?: string;
     ville_cli?: string;
     cp_cli?: string;
     type_cli?: string;
