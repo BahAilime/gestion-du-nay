@@ -14,7 +14,7 @@ import useFindCoordinates from "../hooks/useFindCoordinates";
 import { client, deleteClient, getClientOnce } from "../services/db";
 import Loading from "../components/Loading";
 import SimpleEditor from "../components/SimpleEditor";
-import BigButton from "../components/BigButton";
+import BigButton from "./BigButton";
 
 export default function ClientDetail() {
     const Map = useMemo(() => dynamic(

@@ -10,7 +10,7 @@ import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
 
 import { client, deleteClient, getDossierOnce, line } from "../services/db";
 import SimpleEditor from "../components/SimpleEditor";
-import BigButton from "../components/BigButton";
+import BigButton from "./BigButton";
 import { dossier } from "../services/db";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -19,6 +19,7 @@ import { format, fromUnixTime } from "date-fns";
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
 import { stringToNumber, calcPrice } from "../services/utils";
+import LineTable from "./LineTable";
 
 export default function ClientDetail() {
     const [dossier, setDossier] = useState<dossier>()
@@ -84,73 +85,18 @@ export default function ClientDetail() {
         }
     }
 
-    function calc(prixHt: any, qte: any, tva: any, remise: any = 0) {
-        if (typeof prixHt == "string") {
-            prixHt = stringToNumber(prixHt)
-        }
-
-        if (typeof qte == "string") {
-            qte = stringToNumber(qte)
-        }
-
-        if (typeof tva == "string") {
-            tva = stringToNumber(tva)
-        }
-
-        if (typeof remise == "string") {
-            remise = stringToNumber(remise)
-        }
-
-        return calcPrice(prixHt, qte, tva, remise)
-    }
-
     return (
         <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-2">
             <Card title={titre()} className="overflow-y-auto col-span-2">
                 <div className="flex flex-col gap-2">
                     <Accordion>
-                        <AccordionTab header="Nuits">
-                            <DataTable value={dossier?.nuits?.lines} size="small" emptyMessage="Pas de nuits">
-                                <Column field="label" header="Type" />
-                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
-                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
-                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
-                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
-                                <Column body={(data: line) => {
-                                    return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
-                                }} header="Total"></Column>
-                            </DataTable>
+                        <AccordionTab header="Infos" />
+                        <AccordionTab header="Infos+" >
+                            <LineTable lines={dossier?.nuits?.lines} header="Nuits" emptyMessage="Pas de nuits" />
                         </AccordionTab>
-                        <AccordionTab header="Repas">
-                            <DataTable value={dossier?.repas?.lines} size="small" emptyMessage="Pas de repas">
-                                <Column field="label" header="Type" />
-                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
-                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
-                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
-                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
-                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)} header="Total" />
-                            </DataTable>
-                        </AccordionTab>
-                        <AccordionTab header="Activités">
-                            <DataTable value={dossier?.activite} size="small" emptyMessage="Pas d'activités">
-                                <Column field="label" header="Nom" />
-                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
-                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
-                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
-                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
-                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total" />
-                            </DataTable>
-                        </AccordionTab>
-                        <AccordionTab header="Autre">
-                            <DataTable value={dossier?.divers} size="small" emptyMessage="Rien d'autre">
-                                <Column field="label" header="Nom" />
-                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
-                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
-                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
-                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
-                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total" />
-                            </DataTable>
-                        </AccordionTab>
+                        <LineTable lines={dossier?.repas?.lines} header="Repas" emptyMessage="Pas de repas" />
+                        <LineTable lines={dossier?.activite} header="Activités" emptyMessage="Pas d'activités" />
+                        <LineTable lines={dossier?.divers} header="Autre" emptyMessage="Rien d'autre" />
                     </Accordion>
                     <BigButton className="" text="Supprimer ce dossier" icon={faTrash} onClick={confirmSuppr} outlined={true} severity="danger" />
                 </div>
