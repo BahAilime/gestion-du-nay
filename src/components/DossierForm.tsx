@@ -54,16 +54,16 @@ export default function DossierForm() {
 
             <Card className="w-full h-full" title="Informations sur le séjour">
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
-                    <p>Nombre d'adultes:</p>
+                    <p>Nombre d&apos;adultes:</p>
                     <InputNumber value={infos.adultes} onValueChange={(e) => setInfos({...infos, adultes: (e.value ? e.value : 0)})} />
                 </div>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
-                    <p>Nombre d'enfants:</p>
+                    <p>Nombre d&apos;enfants:</p>
                     <InputNumber value={infos.enfants} onValueChange={(e) => setInfos({...infos, enfants: (e.value ? e.value : 0)})} />
                 </div>
                 <h1 className="text-xl font-medium">Dates</h1>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
-                    <p>Jour d'arrivée:</p>
+                    <p>Jour d&apos;arrivée:</p>
                     <Calendar dateFormat="dd/mm/yy" showButtonBar  value={infos.debut} onChange={(e) => {if (e.value) setInfos({...infos, debut: e.value}); else setInfos({...infos, debut: undefined})}} />
                 </div>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
