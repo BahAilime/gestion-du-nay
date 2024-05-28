@@ -11,7 +11,7 @@ export default function Menu() {
     
     return (
         <div className="flex flex-col gap-4">
-            <MenuSection text="Dossiers" type="WIP">
+            <MenuSection text="Dossiers" type="PROD">
                 <MenuItem text="Nouveau dossier" icon={menuIcon(faFolderPlus)} url="/dossier/nouveau"/>
                 <MenuItem text="Liste des dossiers" icon={menuIcon(faFolderTree)} url="/dossier"/>
             </MenuSection>
