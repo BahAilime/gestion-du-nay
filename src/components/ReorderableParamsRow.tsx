@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 
 import { Dropdown } from 'primereact/dropdown';
+import { calcPrice } from '../services/utils';
 
 export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixHt = 0, tvaBase = "", remiseBase = 0, onChange = (x: any) => x }: { id: string, label?: string, minAge?: number, maxAge?: number, qteBase?: number, prixHt?: number, tvaBase?: string, remiseBase?: number, onChange?: (x: any) => void }) {
   // TODO: Refactor les useState
@@ -22,7 +23,7 @@ export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixH
   }, [])
 
   useEffect(() => {
-    setPrixTotal(Math.floor((ht * ((100 + tvaClean) / 100) * qte - remise) * 100) / 100)
+    setPrixTotal(calcPrice(ht, qte, tvaClean, remise));
   }, [tvaClean, qte, ht, remise])
 
   useEffect(() => {

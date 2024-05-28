@@ -6,6 +6,7 @@ import { InputText } from 'primereact/inputtext';
 
 import { Dropdown } from 'primereact/dropdown';
 import BigButton from './BigButton';
+import { calcPrice, stringToNumber } from '../services/utils';
 
 export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixHt = 0, tvaBase = "", remiseBase = 0, handle = null, onChange = (x: any) => x }: { id: string, label?: string, qteBase?: number, prixHt?: number, tvaBase?: string, remiseBase?: number, handle?: any, onChange?: (x: any|"delete") => void }) {
   // TODO: Refactor les useState
@@ -19,30 +20,19 @@ export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixH
   const [remise, setRemise] = useState(remiseBase);
   
   useEffect(() => {
-    sanitizeTVA(tvaBase);
+    setTvaClean(stringToNumber(tvaBase));
   }, [])
 
   useEffect(() => {
-    setPrixTotal(Math.floor((ht * ((100 + tvaClean) / 100) * qte - remise) * 100) / 100)
+    setPrixTotal(calcPrice(ht, qte, tvaClean, remise));
   }, [tvaClean, qte, ht, remise])
 
   useEffect(() => {
     onChange({ key:id, label:llabel, qte, prixHt:ht, tva, remiseBase:remise })
   }, [llabel, prixTotal])
 
-  function sanitizeTVA(tva: string) {
-    setTva(tva)
-    if (tva == "") {
-      setTvaClean(0);
-      return;
-    }
-    tva = tva.replace(/,/g, '.');
-
-    setTvaClean(parseFloat(tva.replace(/[^0-9.]/g, '')));
-  }
-
   return (
-      <div className='w-[330px] flex gap-2 flex-col items-center justify-between bg-white rounded-xl p-3 mx-auto my-2 hover:border-nay-cyan-700 border-nay-cyan-900 border-2 border-solid'>
+      <div className='customLine w-[330px] flex gap-2 flex-col items-center justify-between bg-white rounded-xl p-3 mx-auto my-2 hover:border-nay-cyan-700 border-nay-cyan-900 border-2 border-solid'>
         <div className='flex items-center gap-2'>
           <h1>
             {qte}
@@ -71,7 +61,7 @@ export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixH
             <div className='flex justify-between items-center'>
               <h1>TVA:</h1>
               <div className='flex gap-2 items-center'>
-                <Dropdown className='dropdown-tva' size={1} value={tva} onChange={(e) => { if (e.value) sanitizeTVA(e.value); else sanitizeTVA("") }} options={[{ value: "0" }, { value: "5.5" }, { value: "10" }, { value: "20" }]} optionLabel="value" optionValue='value' editable placeholder="TVA" />%
+                <Dropdown className='dropdown-tva' size={1} value={tva} onChange={(e) => { if (e.value) setTvaClean(stringToNumber(e.value)); else setTvaClean(0) }} options={[{ value: "0" }, { value: "5.5" }, { value: "10" }, { value: "20" }]} optionLabel="value" optionValue='value' editable placeholder="TVA" />%
               </div>
             </div>
             <div className='flex justify-between items-center'>

@@ -6,9 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Card } from "primereact/card";
 import { confirmDialog } from "primereact/confirmdialog";
 
-import { faUser } from "@fortawesome/free-solid-svg-icons"
+import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
 
-import { client, deleteClient, getDossierOnce } from "../services/db";
+import { client, deleteClient, getDossierOnce, line } from "../services/db";
 import SimpleEditor from "../components/SimpleEditor";
 import BigButton from "../components/BigButton";
 import { dossier } from "../services/db";
@@ -17,6 +17,8 @@ import { Column } from "primereact/column";
 import { format, fromUnixTime } from "date-fns";
 
 import { Accordion, AccordionTab } from 'primereact/accordion';
+
+import { stringToNumber, calcPrice } from "../services/utils";
 
 export default function ClientDetail() {
     const [dossier, setDossier] = useState<dossier>()
@@ -59,8 +61,6 @@ export default function ClientDetail() {
     
     let cardClient = <>{JSON.stringify(dossier)}</>
     if (dossier?.client) {
-        console.log(dossier?.client);
-        
         const { nom_cli, tel_cli, resp_cli, email_cli, notes_cli } : client = dossier.client;
         cardClient = <Card title="Client" className="flex-1 overflow-y-auto">
         {nom_cli && <h1>{nom_cli}</h1>}
@@ -84,8 +84,24 @@ export default function ClientDetail() {
         }
     }
 
-    function calcPrice(qte: number, price: number, tva: number) {
-        return qte * price * (1 + tva / 100)
+    function calc(prixHt: any, qte: any, tva: any, remise: any = 0) {
+        if (typeof prixHt == "string") {
+            prixHt = stringToNumber(prixHt)
+        }
+
+        if (typeof qte == "string") {
+            qte = stringToNumber(qte)
+        }
+
+        if (typeof tva == "string") {
+            tva = stringToNumber(tva)
+        }
+
+        if (typeof remise == "string") {
+            remise = stringToNumber(remise)
+        }
+
+        return calcPrice(prixHt, qte, tva, remise)
     }
 
     return (
@@ -100,7 +116,9 @@ export default function ClientDetail() {
                                 <Column field="prixHt" header="Prix HT"></Column>
                                 <Column field="tva" header="TVA"></Column>
                                 <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)+"€"} header="Total"></Column>
+                                <Column body={(data: line) => {
+                                    return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
+                                }} header="Total"></Column>
                             </DataTable>
                         </AccordionTab>
                         <AccordionTab header="Repas">
@@ -110,7 +128,7 @@ export default function ClientDetail() {
                                 <Column field="prixHt" header="Prix HT"></Column>
                                 <Column field="tva" header="TVA"></Column>
                                 <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)} header="Total"></Column>
+                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)} header="Total"></Column>
                             </DataTable>
                         </AccordionTab>
                         <AccordionTab header="Activités">
@@ -120,7 +138,7 @@ export default function ClientDetail() {
                                 <Column field="prixHt" header="Prix HT"></Column>
                                 <Column field="tva" header="TVA"></Column>
                                 <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)+"€"} header="Total"></Column>
+                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total"></Column>
                             </DataTable>
                         </AccordionTab>
                         <AccordionTab header="Autre">
@@ -130,11 +148,11 @@ export default function ClientDetail() {
                                 <Column field="prixHt" header="Prix HT"></Column>
                                 <Column field="tva" header="TVA"></Column>
                                 <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calcPrice(data.qte, data.prixHt, data.tva)+"€"} header="Total"></Column>
+                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total"></Column>
                             </DataTable>
                         </AccordionTab>
                     </Accordion>
-                    <BigButton className="" text="Supprimer ce dossier" icon={faUser} onClick={confirmSuppr} />
+                    <BigButton className="" text="Supprimer ce dossier" icon={faTrash} onClick={confirmSuppr} outlined={true} severity="danger" />
                 </div>
             </Card>
             {cardClient}
