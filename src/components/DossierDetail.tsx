@@ -111,11 +111,11 @@ export default function ClientDetail() {
                     <Accordion>
                         <AccordionTab header="Nuits">
                             <DataTable value={dossier?.nuits?.lines} size="small" emptyMessage="Pas de nuits">
-                                <Column field="label" header="Type"></Column>
-                                <Column field="qte" header="Qte"></Column>
-                                <Column field="prixHt" header="Prix HT"></Column>
-                                <Column field="tva" header="TVA"></Column>
-                                <Column field="remise" header="Remise"></Column>
+                                <Column field="label" header="Type" />
+                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
+                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
+                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
+                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
                                 <Column body={(data: line) => {
                                     return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
                                 }} header="Total"></Column>
@@ -123,32 +123,32 @@ export default function ClientDetail() {
                         </AccordionTab>
                         <AccordionTab header="Repas">
                             <DataTable value={dossier?.repas?.lines} size="small" emptyMessage="Pas de repas">
-                                <Column field="label" header="Type"></Column>
-                                <Column field="qte" header="Qte"></Column>
-                                <Column field="prixHt" header="Prix HT"></Column>
-                                <Column field="tva" header="TVA"></Column>
-                                <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)} header="Total"></Column>
+                                <Column field="label" header="Type" />
+                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
+                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
+                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
+                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
+                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)} header="Total" />
                             </DataTable>
                         </AccordionTab>
                         <AccordionTab header="Activités">
                             <DataTable value={dossier?.activite} size="small" emptyMessage="Pas d'activités">
-                                <Column field="label" header="Nom"></Column>
-                                <Column field="qte" header="Qte"></Column>
-                                <Column field="prixHt" header="Prix HT"></Column>
-                                <Column field="tva" header="TVA"></Column>
-                                <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total"></Column>
+                                <Column field="label" header="Nom" />
+                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
+                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
+                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
+                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
+                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total" />
                             </DataTable>
                         </AccordionTab>
                         <AccordionTab header="Autre">
                             <DataTable value={dossier?.divers} size="small" emptyMessage="Rien d'autre">
-                                <Column field="label" header="Nom"></Column>
-                                <Column field="qte" header="Qte"></Column>
-                                <Column field="prixHt" header="Prix HT"></Column>
-                                <Column field="tva" header="TVA"></Column>
-                                <Column field="remise" header="Remise"></Column>
-                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total"></Column>
+                                <Column field="label" header="Nom" />
+                                <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
+                                <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
+                                <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
+                                <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
+                                <Column body={(data) => calc(data.qte, data.prixHt, data.tva, data.remise)+"€"} header="Total" />
                             </DataTable>
                         </AccordionTab>
                     </Accordion>
