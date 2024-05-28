@@ -14,7 +14,6 @@ export default function Home() {
 
     useEffect(() => {
         getDossiersOnce().then((data) => {
-            console.log(data);
             setDossiers(data);
         });
     }, [])

@@ -57,7 +57,6 @@ export default function ClientDetail() {
             return
         }
         getClientOnce(firebase_id).then((user) => {  
-            console.log("OW !!!!") 
             const addressComponents = [
                 user.adr_cli,
                 user.ville_cli,

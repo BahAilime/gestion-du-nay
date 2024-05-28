@@ -145,6 +145,7 @@ export default function DossierForm() {
                                 repas,
                                 divers
                             }, (dossier) => {
+                                // TODO: go to dossier/detail
                                 console.log(dossier);
                             })
                         } else {
@@ -162,6 +163,7 @@ export default function DossierForm() {
                                         repas,
                                         divers
                                     }, (dossier) => {
+                                        // TODO: go to dossier/detail
                                         console.log(dossier);
                                     })
                                 }
