@@ -90,13 +90,10 @@ export default function ClientDetail() {
             <Card title={titre()} className="overflow-y-auto col-span-2">
                 <div className="flex flex-col gap-2">
                     <Accordion>
-                        <AccordionTab header="Infos" />
-                        <AccordionTab header="Infos+" >
-                            <LineTable lines={dossier?.nuits?.lines} header="Nuits" emptyMessage="Pas de nuits" />
-                        </AccordionTab>
-                        <LineTable lines={dossier?.repas?.lines} header="Repas" emptyMessage="Pas de repas" />
-                        <LineTable lines={dossier?.activite} header="Activités" emptyMessage="Pas d'activités" />
-                        <LineTable lines={dossier?.divers} header="Autre" emptyMessage="Rien d'autre" />
+                        <AccordionTab header="Nuits" ><LineTable lines={dossier?.nuits?.lines} header="Nuits" emptyMessage="Pas de nuits" /></AccordionTab>
+                        <AccordionTab header="Repas" ><LineTable lines={dossier?.repas?.lines} header="Repas" emptyMessage="Pas de repas" /></AccordionTab>
+                        <AccordionTab header="Activités" ><LineTable lines={dossier?.activite} header="Activités" emptyMessage="Pas d'activités" /></AccordionTab>
+                        <AccordionTab header="Autre" ><LineTable lines={dossier?.divers} header="Autre" emptyMessage="Rien d'autre" /></AccordionTab>
                     </Accordion>
                     <BigButton className="" text="Supprimer ce dossier" icon={faTrash} onClick={confirmSuppr} outlined={true} severity="danger" />
                 </div>
