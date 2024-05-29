@@ -27,7 +27,7 @@ export default function Home() {
         {key:"ehjbvsjhtv", label: "Adulte", qte: 7},
         {key:"klkjbhvgvs", label: "VIEUX", qte: 7}
         ]} onChange={(x) => console.log(x)}/>
-      <CustomLine id='1' label='Hejjj' prixHt={12} tvaBase='20' remiseBase={10} qteBase={5} />
+      <CustomLine id='1' label='Hejjj' prixHt={12} tvaBase={20} remiseBase={10} qteBase={5} />
     </>
   );
 }
