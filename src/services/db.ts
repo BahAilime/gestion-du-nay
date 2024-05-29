@@ -25,7 +25,7 @@ export type line = {
 }
 
 export type dossier = {
-    idClient: string,
+    idClient?: string,
     client?: client,
     infos?: {
         debut?: Date,
@@ -153,18 +153,22 @@ export async function getDossiersOnce(): Promise<dossier[]> {
         const dossiersPromises: Promise<dossier>[] = [];
         snapshot.forEach((snapDossier) => {
             let dossier: dossier = snapDossier.val();
-            const dossierPromise = getClientOnce(dossier.idClient)
-                .then((client) => {
-                    const dossierComplet: dossier = { ...dossier, client, firebase_id: snapDossier.key };
-                    if (typeof dossier.infos?.debut == "number") {
-                        dossier.infos.debut = fromUnixTime(dossier.infos.debut)
-                    }
-                    if (typeof dossier.infos?.fin == "number") {
-                        dossier.infos.fin = fromUnixTime(dossier.infos?.fin)
-                    }
-                    return dossierComplet;
-                });
-            dossiersPromises.push(dossierPromise);
+            if (dossier.idClient) {
+                const dossierPromise = getClientOnce(dossier.idClient)
+                    .then((client) => {
+                        const dossierComplet: dossier = { ...dossier, client, firebase_id: snapDossier.key };
+                        if (typeof dossier.infos?.debut == "number") {
+                            dossier.infos.debut = fromUnixTime(dossier.infos.debut)
+                        }
+                        if (typeof dossier.infos?.fin == "number") {
+                            dossier.infos.fin = fromUnixTime(dossier.infos?.fin)
+                        }
+                        return dossierComplet;
+                    });
+                dossiersPromises.push(dossierPromise);
+            } else {
+                dossiersPromises.push(Promise.resolve(dossier));
+            }
         });
 
         const dossiers = await Promise.all(dossiersPromises);
@@ -182,8 +186,10 @@ export async function getDossierOnce(id: number | string): Promise<dossier> {
         const dossier: dossier = snapDossier.val();
         await update(snapDossier.ref, { lastSeen: serverTimestamp() });
 
-        const clientData = await getClientOnce(dossier.idClient);
-        dossier.client = clientData;
+        if (dossier.idClient) {
+            const clientData = await getClientOnce(dossier.idClient);
+            dossier.client = clientData;
+        }
 
         return dossier
     } else {
