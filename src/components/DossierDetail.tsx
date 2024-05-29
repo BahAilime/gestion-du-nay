@@ -63,6 +63,7 @@ export default function ClientDetail() {
     let cardClient = <>{JSON.stringify(dossier)}</>
     if (dossier?.client) {
         const { nom_cli, tel_cli, resp_cli, email_cli, notes_cli } : client = dossier.client;
+        const firebase_id = dossier.idClient
         cardClient = <Card title="Client" className="flex-1 overflow-y-auto">
         {nom_cli && <h1>{nom_cli}</h1>}
         {resp_cli && <h2>{resp_cli}</h2>}
