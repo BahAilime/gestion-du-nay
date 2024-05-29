@@ -18,7 +18,7 @@ export default function Home() {
     }, [])
 
     return (
-        <Card title="Clients" className="w-full h-full">
+        <Card title="Clients" className="w-full min-h-full">
             {client ?
             <DataTable  value={client} className="w-full" selectionMode="single" onSelectionChange={(e) => router.push(`/client/detail?firebase_id=${e.value.firebase_id}`)}>
                 <Column field="nom_cli" header="Nom"></Column>

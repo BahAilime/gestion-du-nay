@@ -30,7 +30,7 @@ export default function Home() {
     }
 
     return (
-        <Card title="Dossiers" className="w-full h-full">
+        <Card title="Dossiers" className="w-full min-h-full">
             {dossiers ?
             <DataTable  value={dossiers} className="w-full" selectionMode="single" onSelectionChange={(e) => router.push(`/dossier/detail?firebase_id=${e.value.firebase_id}`)}>
                 <Column body={(data: dossier) => <div><span className="font-bold">{data?.client?.nom_cli}</span><br/>{data?.client?.resp_cli}</div>} header="Client"></Column>
