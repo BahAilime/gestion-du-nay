@@ -15,6 +15,7 @@ import { dossier } from "../services/db";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { format, fromUnixTime } from "date-fns";
+import { fr } from "date-fns/locale";
 
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
@@ -78,10 +79,26 @@ export default function ClientDetail() {
         if (!dossier || !dossier.infos || !dossier.infos.debut || !dossier.infos.fin) {
             return "Dossier"
         } else {
-            if (typeof dossier.infos.debut === 'number') {
-                const deb = format(fromUnixTime(dossier.infos.debut), "dd/MM/yyyy")
-                const fin = format(dossier.infos.fin, "dd/MM/yyyy")
-                return `Séjour du ${deb} au ${fin}`
+            if (typeof dossier.infos.debut === 'number' && typeof dossier.infos.fin === 'number') {
+                const debDate = fromUnixTime(dossier.infos.debut)
+                const finDate = fromUnixTime(dossier.infos.fin)
+                const debYear = format(debDate, "yyyy")
+                const finYear = format(finDate, "yyyy")
+                const debMonth = format(debDate, "MMMM", { locale: fr })
+                const finMonth = format(finDate, "MMMM", { locale: fr })
+                if (debYear !== finYear) {
+                    const deb = format(fromUnixTime(dossier.infos.debut), "dd/MM/yyyy")
+                    const fin = format(fromUnixTime(dossier.infos.fin), "dd/MM/yyyy")
+                    return `Séjour du ${deb} au ${fin}`
+                } else if (debMonth != finMonth) {
+                    const deb = format(debDate, "dd MMMM", { locale: fr })
+                    const fin = format(finDate, "dd MMMM yyyy", { locale: fr })
+                    return `Séjour du ${deb} au ${fin}`
+                } else {
+                    const deb = format(debDate, "dd", { locale: fr })
+                    const fin = format(finDate, "dd MMMM yyyy", { locale: fr })
+                    return `Séjour du ${deb} au ${fin}`
+                }
             }
         }
     }
