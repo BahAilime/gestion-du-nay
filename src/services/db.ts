@@ -28,8 +28,8 @@ export type dossier = {
     idClient: string,
     client?: client,
     infos?: {
-        debut?: Date|number,
-        fin?: Date|number,
+        debut?: Date,
+        fin?: Date,
         adultes?: number,
         enfants?: number,
         nuits?: number
@@ -129,14 +129,15 @@ export function deleteClient(id: number|string, callback: () => void) {
 
 export function newDossier(data:dossier, callback: (client: DatabaseReference) => void) {
     data.lastSeen = serverTimestamp()
+    let dataTransition: any = data
     if (data.infos?.debut) {
-        data.infos.debut = getUnixTime(data.infos.debut)
+        dataTransition.infos.debut = getUnixTime(data.infos.debut)
     }
     if (data.infos?.fin) {
-        data.infos.fin = getUnixTime(data.infos?.fin)
+        dataTransition.infos.fin = getUnixTime(data.infos?.fin)
     }
 
-    push(dossierRef, data)
+    push(dossierRef, dataTransition)
         .then((newDos) => {
             callback(newDos)
         })
@@ -188,4 +189,15 @@ export async function getDossierOnce(id: number | string): Promise<dossier> {
     } else {
         throw new Error("Dossier introuvable");
     }
+}
+
+export function updateDossier(id: number|string, data: dossier|any, callback: () => void) {
+    data.lastSeen = serverTimestamp()
+    get(child(dossierRef, `${id}`))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                update(snapshot.ref, data)
+                    .then(() => callback())
+            }
+        })
 }
