@@ -6,8 +6,9 @@ import { faCircleXmark, faEllipsis, faPenToSquare, faPlusCircle } from "@fortawe
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useRef } from 'react';
 import { ContextMenu } from 'primereact/contextmenu';
+import { line } from "../services/db"
 
-export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: { rows: {key: string, label?: string, qte?: number, prixHt?: number, tva?: string, remise?: number}[], onChange: (x: any) => void }) {
+export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: { rows: line[], onChange: (x: any) => void }) {
     const [items, setItems] = useState(rows)
     const cm = useRef<any>(null);
     const ctxMenu = [
@@ -43,8 +44,17 @@ export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: 
                 <ContextMenu model={ctxMenu} ref={cm} breakpoint="767px" />
                 <FontAwesomeIcon icon={faEllipsis} className="absolute top-1 right-2 text-nay-cyan-400 cursor-pointer" onClick={(e) => {cm.current.show(e)}}/>
             </div>
-            {items.map((item, index) => (
-                <CustomLine key={item.key} id={item.key} label={item.label} qteBase={item.qte} prixHt={item.prixHt} tvaBase={item.tva} remiseBase={item.remise} onChange={(x) => {
+            {items.map((item, index) => {
+                if (!item.key) return
+                return <CustomLine
+                        key={item.key}
+                        id={item.key}
+                        label={item.label}
+                        qteBase={item.qte}
+                        prixHt={item.prixHt}
+                        tvaBase={item.tva}
+                        remiseBase={item.remise}
+                        onChange={(x) => {
                     if (x == "delete") {
                         setItems(items.filter((item, i) => i != index))
                     } else {
@@ -54,7 +64,7 @@ export default function ReorderableParams({ rows, onChange = (x: any) => {x} }: 
                     }
                 }
                 }/>
-            ))}
+                })}
         </div>
     )
 }
