@@ -8,20 +8,16 @@ import { Dropdown } from 'primereact/dropdown';
 import BigButton from './BigButton';
 import { calcPrice, stringToNumber } from '../services/utils';
 
-export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixHt = 0, tvaBase = "", remiseBase = 0, handle = null, onChange = (x: any) => x }: { id: string, label?: string, qteBase?: number, prixHt?: number, tvaBase?: string, remiseBase?: number, handle?: any, onChange?: (x: any|"delete") => void }) {
+export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixHt = 0, tvaBase = 0, remiseBase = 0, handle = null, onChange = (x: any) => x }: { id: string, label?: string, qteBase?: number, prixHt?: number, tvaBase?: number, remiseBase?: number, handle?: any, onChange?: (x: any|"delete") => void }) {
   // TODO: Refactor les useState
   const [qte, setQte] = useState(qteBase);
   const [llabel, setLabel] = useState(label);
   const [open, setOpen] = useState(false);
   const [ht, setHt] = useState(prixHt);
   const [tva, setTva] = useState(tvaBase);
-  const [tvaClean, setTvaClean] = useState(0);
+  const [tvaClean, setTvaClean] = useState(tvaBase);
   const [prixTotal, setPrixTotal] = useState(0);
   const [remise, setRemise] = useState(remiseBase);
-  
-  useEffect(() => {
-    setTvaClean(stringToNumber(tvaBase));
-  }, [])
 
   useEffect(() => {
     setPrixTotal(calcPrice(ht, qte, tvaClean, remise));
@@ -61,7 +57,10 @@ export default function ReorderableParamsRow({id, label = "", qteBase = 0, prixH
             <div className='flex justify-between items-center'>
               <h1>TVA:</h1>
               <div className='flex gap-2 items-center'>
-                <Dropdown className='dropdown-tva' size={1} value={tva} onChange={(e) => { if (e.value) setTvaClean(stringToNumber(e.value)); else setTvaClean(0) }} options={[{ value: "0" }, { value: "5.5" }, { value: "10" }, { value: "20" }]} optionLabel="value" optionValue='value' editable placeholder="TVA" />%
+                <Dropdown className='dropdown-tva' size={1} value={tva} onChange={(e) => {
+                  setTva(e.value)
+                  setTvaClean(stringToNumber(e.value))
+                  }} options={[{ value: "0" }, { value: "5.5" }, { value: "10" }, { value: "20" }]} optionLabel="value" optionValue='value' editable placeholder="TVA" />%
               </div>
             </div>
             <div className='flex justify-between items-center'>
