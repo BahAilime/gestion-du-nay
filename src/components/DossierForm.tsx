@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Card } from 'primereact/card';
 import { TabMenu } from 'primereact/tabmenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faHeart, faSquareCheck, faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faHeart, faSquareCheck, faPenSquare, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import ClientForm from "./ClientForm";
 import ClientDropDown from "./ClientDropDown";
 import ReorderableParams from "./ReorderableParams";
@@ -41,7 +41,7 @@ const defaultDossier: dossier = {
     ]
 }
 
-export default function DossierForm({dossierImport = defaultDossier}: {dossierImport?: dossier}) {
+export default function DossierForm({dossierImport = defaultDossier, buttonText="Valider", buttonIcon, onFormSubmit}: {dossierImport?: dossier, buttonText?: string, buttonIcon?: IconDefinition, onFormSubmit?: (dossier: dossier) => void}) {
     const [activeIndex, setActiveIndex] = useState(0);
     const items = [
         { label: 'Nouveau client', icon: <FontAwesomeIcon icon={faPlus} className="mr-2" /> },
@@ -130,25 +130,7 @@ export default function DossierForm({dossierImport = defaultDossier}: {dossierIm
             </Card>
             
             <Card className="w-full h-full" title="Valier">
-                <BigButton text="Valider" icon={faSquareCheck} onClick={() => {
-                    if (dossier.idClient) {
-                        newDossier(dossier, (dossier) => {
-                            // TODO: go to dossier/detail
-                            console.log(dossier);
-                        })
-                    } else if (dossier.client) {
-                        
-                        newClient(dossier.client, (client) => {
-                            if (!client.key) return
-
-                            dossier.idClient = client.key
-                            newDossier(dossier, (dossier) => {
-                                // TODO: go to dossier/detail
-                                console.log(dossier);
-                            })
-                        });
-                    } 
-            }} />
+                <BigButton text={buttonText} icon={buttonIcon} onClick={() => {if (onFormSubmit) onFormSubmit(dossier)}}/>
             </Card>
 
             <Debug>
