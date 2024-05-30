@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { Card } from 'primereact/card';
 import { TabMenu } from 'primereact/tabmenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faHeart, faSquareCheck, faPenSquare, IconDefinition, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, IconDefinition, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import ClientForm from "./ClientForm";
 import ClientDropDown from "./ClientDropDown";
 import ReorderableParams from "./ReorderableParams";
@@ -13,8 +13,8 @@ import CustomLineGroup from "./CustomLineGroup";
 import { Calendar } from "primereact/calendar";
 import BigButton from "./BigButton";
 import useDossier from "@/src/hooks/useDossier";
-import { newClient, newDossier, client, updateDossier, dossier } from "@/src/services/db";
-import { differenceInDays } from 'date-fns';
+import { dossier } from "@/src/services/db";
+import { differenceInDays } from 'date-fns/differenceInDays';
 
 // TODO: rendre ca configurable
 

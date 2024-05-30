@@ -5,8 +5,8 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useRouter } from 'next/navigation'
 import Loading from '@/src/components/Loading';
-import { dossier, getClientsOnce, getDossiersOnce } from '@/src/services/db';
-import { format } from 'date-fns';
+import { dossier, getDossiersOnce } from '@/src/services/db';
+import { format } from 'date-fns/format';
 
 export default function Home() {
     const [dossiers, setDossiers] = useState<any[]>();

@@ -1,4 +1,3 @@
-import { AccordionTab } from "primereact/accordion"
 import { Column } from "primereact/column"
 import { DataTable } from "primereact/datatable"
 import { line } from "../services/db"

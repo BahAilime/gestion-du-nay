@@ -1,5 +1,6 @@
 import { db } from "@/src/services/firebase";
-import { fromUnixTime, getUnixTime } from "date-fns";
+import { fromUnixTime } from "date-fns/fromUnixTime";
+import { getUnixTime } from "date-fns/getUnixTime";
 import { ref, child, get, onValue, push, update, remove, serverTimestamp, query, orderByChild, DatabaseReference} from "firebase/database";
 
 export type client = {

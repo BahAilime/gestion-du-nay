@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import DossierForm from "@/src/components/DossierForm";
 import { faSquarePen } from '@fortawesome/free-solid-svg-icons'
-import { client, dossier, getClientOnce, getDossierOnce, updateClient } from "@/src/services/db";
+import { dossier, getDossierOnce, updateClient } from "@/src/services/db";
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 
 export default function DossierEdit() {

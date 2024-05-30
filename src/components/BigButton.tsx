@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, ButtonProps } from 'primereact/button';
+import { Button } from 'primereact/button';
 
 export default function BigButton({
     text = "",
