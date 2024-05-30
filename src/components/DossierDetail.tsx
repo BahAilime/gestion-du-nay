@@ -4,11 +4,11 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 
 import { Card } from "primereact/card";
-import { confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
-import { faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
+import { faSquarePen, faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
 
-import { client, deleteClient, getDossierOnce, line } from "../services/db";
+import { client, deleteClient, deleteDossier, getDossierOnce, line } from "../services/db";
 import SimpleEditor from "../components/SimpleEditor";
 import BigButton from "./BigButton";
 import { dossier } from "../services/db";
@@ -43,7 +43,7 @@ export default function ClientDetail() {
             router.push("/dossier")
             return
         }
-        deleteClient(firebase_id, () => {
+        deleteDossier(firebase_id, () => {
             router.push("/dossier")
         })
     }
@@ -113,7 +113,11 @@ export default function ClientDetail() {
                         <AccordionTab header="Activités" ><LineTable lines={dossier?.activite} header="Activités" emptyMessage="Pas d'activités" /></AccordionTab>
                         <AccordionTab header="Autre" ><LineTable lines={dossier?.divers} header="Autre" emptyMessage="Rien d'autre" /></AccordionTab>
                     </Accordion>
-                    <BigButton className="" text="Supprimer ce dossier" icon={faTrash} onClick={confirmSuppr} outlined={true} severity="danger" />
+                    <div className="flex gap-2 flex-wrap">
+                        <BigButton className="min-w-fit flex-1" text="Modifier ce dossier" icon={faSquarePen} onClick={() => { router.push(`/dossier/modifier?firebase_id=${firebase_id}`)}} outlined={true} />
+                        <ConfirmDialog />
+                        <BigButton className="min-w-fit flex-1" text="Supprimer ce dossier" icon={faTrash} onClick={confirmSuppr} outlined={true} severity="danger" />
+                    </div>
                 </div>
             </Card>
             {cardClient}
