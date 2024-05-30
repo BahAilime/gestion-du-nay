@@ -121,7 +121,7 @@ export default function DossierForm({dossierImport = defaultDossier, buttonText=
                 />
             </Card>
 
-            {/* <Card className="w-full h-full" title="Activités">
+            <Card className="w-full h-full" title="Activités">
                 <CustomLineGroup
                     rows={dossier.activite ?? []}
                     onChange={(e) => setDossier("activite", e)}
@@ -133,7 +133,7 @@ export default function DossierForm({dossierImport = defaultDossier, buttonText=
                     rows={dossier.divers ?? []}
                     onChange={(e) => setDossier("divers", e)}
                 />
-            </Card> */}
+            </Card>
             
             <Card className="w-full h-full" title="Valier">
                 <BigButton text={buttonText} icon={buttonIcon} onClick={() => {if (onFormSubmit) onFormSubmit(dossier)}}/>
