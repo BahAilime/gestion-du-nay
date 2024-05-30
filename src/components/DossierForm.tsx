@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { Card } from 'primereact/card';
 import { TabMenu } from 'primereact/tabmenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faHeart, faSquareCheck, faPenSquare, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faHeart, faSquareCheck, faPenSquare, IconDefinition, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import ClientForm from "./ClientForm";
 import ClientDropDown from "./ClientDropDown";
 import ReorderableParams from "./ReorderableParams";
@@ -44,11 +44,17 @@ const defaultDossier: dossier = {
 export default function DossierForm({dossierImport = defaultDossier, buttonText="Valider", buttonIcon, onFormSubmit}: {dossierImport?: dossier, buttonText?: string, buttonIcon?: IconDefinition, onFormSubmit?: (dossier: dossier) => void}) {
     const [activeIndex, setActiveIndex] = useState(0);
     const items = [
-        { label: 'Nouveau client', icon: <FontAwesomeIcon icon={faPlus} className="mr-2" /> },
         { label: 'Déja venu', icon: <FontAwesomeIcon icon={faHeart} className="mr-2" /> },
+        { label: 'Nouveau client', icon: <FontAwesomeIcon icon={faUserPlus} className="mr-2" /> },
     ];
 
     const [dossier, setDossier] = useDossier(dossierImport);
+
+    useEffect(() => {
+        if (dossier.idClient) {
+            setActiveIndex(0);
+        }
+    }, [])
 
     useEffect(() => {
         if (dossier?.infos?.debut && dossier?.infos?.fin) {
@@ -58,15 +64,15 @@ export default function DossierForm({dossierImport = defaultDossier, buttonText=
     return (
         <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 grid-flow-dense gap-2">
             {activeIndex === 0 &&
-            <Card title="Client" className="w-full h-full col-span-2 row-span-2">
+            <Card title="Client" className="w-full h-full col-span-1 row-span-1">
                 <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
-                <ClientForm onChange={(clientInfos) => setDossier("client", clientInfos)} />
+                <ClientDropDown value={dossier?.idClient} onChange={(client: string) => setDossier("idClient", client)} />
             </Card>}
 
             {activeIndex === 1 &&
-            <Card title="Client" className="w-full h-full col-span-1 row-span-1">
+            <Card title="Client" className="w-full h-full col-span-2 row-span-2">
                 <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
-                <ClientDropDown onChange={(client: string) => setDossier("idClient", client)} />
+                <ClientForm onChange={(clientInfos) => setDossier("client", clientInfos)} />
             </Card>}
 
             <Card className="w-full h-full" title="Informations sur le séjour">
