@@ -4,8 +4,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { getClientsOnce } from "@/src/services/db";
 import Loading from "./Loading";
 
-export default function ClientDropDown({ onChange = (x: any) => x }) {
-    const [selectedCli, setSelectedCli] = useState(null);
+export default function ClientDropDown({value="", onChange = (x: any) => x }) {
+    const [selectedCli, setSelectedCli] = useState(value);
     const [clients, setClients] = useState<any[]>();
 
     function clientsToDropdown(inputArray: any[]) {
@@ -17,7 +17,7 @@ export default function ClientDropDown({ onChange = (x: any) => x }) {
             if (!acc[type_cli]) {
                 acc[type_cli] = [];
             }
-            acc[type_cli].push({ label: `${nom_cli} (${resp_cli})`, value: firebase_id });
+            acc[type_cli].push({ label: `${nom_cli} ${resp_cli ? `(${resp_cli})` : ""}`, value: firebase_id });
             return acc;
         }, {});
 
