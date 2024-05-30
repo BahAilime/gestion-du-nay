@@ -207,3 +207,15 @@ export function updateDossier(id: number|string, data: dossier|any, callback: ()
             }
         })
 }
+
+export function deleteDossier(id: string, callback: () => void) {
+    get(child(dossierRef, `${id}`))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                remove(snapshot.ref)
+                    .then(() => {
+                        callback()
+                    })
+            }
+        })
+    }
