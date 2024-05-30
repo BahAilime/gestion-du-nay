@@ -8,18 +8,16 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
 import { faSquarePen, faTrash, faUser } from "@fortawesome/free-solid-svg-icons"
 
-import { client, deleteClient, deleteDossier, getDossierOnce, line } from "../services/db";
+import { client, deleteClient, deleteDossier, getDossierOnce } from "../services/db";
 import SimpleEditor from "../components/SimpleEditor";
 import BigButton from "./BigButton";
 import { dossier } from "../services/db";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { format, fromUnixTime } from "date-fns";
+import { format } from "date-fns/format";
+import { fromUnixTime } from "date-fns/fromUnixTime";
 import { fr } from "date-fns/locale";
 
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
-import { stringToNumber, calcPrice } from "../services/utils";
 import LineTable from "./LineTable";
 
 export default function ClientDetail() {

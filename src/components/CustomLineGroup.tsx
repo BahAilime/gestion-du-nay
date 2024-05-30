@@ -1,8 +1,6 @@
-import { AnimatePresence, Reorder, useDragControls } from "framer-motion"
-import { useState, Children, useEffect } from "react"
+import { useState, useEffect } from "react"
 import CustomLine from "./CustomLine"
-import BigButton from "./BigButton"
-import { faCircleXmark, faEllipsis, faPenToSquare, faPlusCircle } from "@fortawesome/free-solid-svg-icons"
+import { faCircleXmark, faEllipsis, faPlusCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useRef } from 'react';
 import { ContextMenu } from 'primereact/contextmenu';
