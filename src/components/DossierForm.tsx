@@ -21,19 +21,19 @@ import { differenceInDays } from 'date-fns';
 const defaultDossier: dossier = {
     repas: {
         lines: [
-            {key: "dej", label: "Petit déjeuner", qte: 0, prixHt: 0, tva: 10, remise: 0},
-            {key: "enf", label: "Repas enfant", qte: 0, prixHt: 0, tva: 10, remise: 0},
-            {key: "coll", label: "Repas collègien", qte: 0, prixHt: 0, tva: 10, remise: 0},
-            {key: "adlte", label: "Repas adulte", qte: 0, prixHt: 0, tva: 10, remise: 0},
-            {key: "piquenique", label: "Pique-nique indiv. enfant et adulte", qte: 0, prixHt: 0, tva: 10, remise: 0},
+            {key: "dej", label: "Petit déjeuner", qte: 0, prixHt: 4.82, tva: 10, remise: 0},
+            {key: "enf", label: "Repas enfant", qte: 0, prixHt: 7.55, tva: 10, remise: 0},
+            {key: "coll", label: "Repas collègien", qte: 0, prixHt: 8.45, tva: 10, remise: 0},
+            {key: "adlte", label: "Repas adulte", qte: 0, prixHt: 10.18, tva: 10, remise: 0},
+            {key: "piquenique", label: "Pique-nique indiv. enfant et adulte", qte: 0, prixHt: 7.44, tva: 10, remise: 0},
             {key: "gouter", label: "Goûter enfant et adulte", qte: 0, prixHt: 0, tva: 5.5, remise: 0}
         ],
     },
     activite: [
-        {key: "natpeda", label: "Séance activité nature-péda enf.", qte: 0, prixHt: 0, tva: 10, remise: 0},
-        {key: "jard", label: "Séance activité jardin enfant", qte: 0, prixHt: 0, tva: 10, remise: 0},
-        {key: "eque", label: "Séance activité équestre", qte: 0, prixHt: 0, tva: 10, remise: 0},
-        {key: "orien", label: "Course d'orientation", qte: 0, prixHt: 0, tva: 10, remise: 0},
+        {key: "natpeda", label: "Séance activité nature-péda enf.", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
+        {key: "jard", label: "Séance activité jardin enfant", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
+        {key: "eque", label: "Séance activité équestre", qte: 0, prixHt: 12, tva: 10, remise: 0},
+        {key: "orien", label: "Course d'orientation", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
     ],
     divers: [
         {key: "communs", label: "Gestion libre des lieux communs", qte: 0, prixHt: 0, tva: 10, remise: 0},
@@ -115,7 +115,7 @@ export default function DossierForm({dossierImport = defaultDossier, buttonText=
                 />
             </Card>
 
-            <Card className="w-full h-full" title="Activités">
+            {/* <Card className="w-full h-full" title="Activités">
                 <CustomLineGroup
                     rows={dossier.activite ?? []}
                     onChange={(e) => setDossier("activite", e)}
@@ -127,7 +127,7 @@ export default function DossierForm({dossierImport = defaultDossier, buttonText=
                     rows={dossier.divers ?? []}
                     onChange={(e) => setDossier("divers", e)}
                 />
-            </Card>
+            </Card> */}
             
             <Card className="w-full h-full" title="Valier">
                 <BigButton text={buttonText} icon={buttonIcon} onClick={() => {if (onFormSubmit) onFormSubmit(dossier)}}/>
