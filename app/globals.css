@@ -47,10 +47,6 @@ h1, h2, h3, p {
   height: 100%;
 }
 
-.p-inputnumber-button-up, .p-inputnumber-button-down, .p-inputnumber-stacked	 {
-  display: none;
-}
-
 .p-inputnumber-input	 {
   padding: 7px;
   width: auto;
