@@ -1,7 +1,10 @@
-import { Column } from "primereact/column"
-import { DataTable } from "primereact/datatable"
+import { Column, ColumnEditorOptions } from "primereact/column"
+import { DataTable, DataTableRowEditCompleteEvent } from "primereact/datatable"
 import { line } from "../services/db"
 import { calcPrice, stringToNumber } from "../services/utils"
+import { InputText } from "primereact/inputtext"
+import { Dropdown } from "primereact/dropdown"
+import { InputNumber } from "primereact/inputnumber"
 
 function calc(prixHt: any, qte: any, tva: any, remise: any = 0) {
     if (typeof prixHt == "string") {
@@ -23,15 +26,70 @@ function calc(prixHt: any, qte: any, tva: any, remise: any = 0) {
     return calcPrice(prixHt, qte, tva, remise)
 }
 
-export default function LineTable({ lines, emptyMessage = "Vide" }: { lines?: line[], header: string, emptyMessage?: string }) {
-    return (<DataTable value={lines} size="small" emptyMessage={emptyMessage}>
-                    <Column field="label" header="Type" />
-                    <Column body={(data) => data.qte ? data.qte : 0} header="Qte" />
-                    <Column body={(data) => data.prixHt ? data.prixHt : 0} header="Prix HT" />
-                    <Column body={(data) => data.tva ? data.tva : 0} header="TVA" />
-                    <Column body={(data) => data.remise ? data.remise : 0} header="Remise" />
-                    <Column body={(data: line) => {
-                        return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
-                    }} header="Total"></Column>
-                </DataTable>)
+function textEditor (options: ColumnEditorOptions) {
+        return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback ? options.editorCallback(e.target.value) : null} />;
+};
+
+function numberEditor (options: ColumnEditorOptions) {
+    return <InputNumber
+        min={0.00}
+        value={options.value}
+        onChange={(e) => options.editorCallback ? options.editorCallback(e.value) : null}
+        maxFractionDigits={2}
+        />;
+};
+
+function tvaEditor (options: ColumnEditorOptions) {
+    return <Dropdown className='dropdown-tva' 
+        size={1}
+        value={options.value}
+        onChange={(e) => options.editorCallback ? options.editorCallback(e.value) : null}
+        onBlur={(e) => {
+        console.log("oldvel", e.target.value);
+        
+        const value = stringToNumber(e.target.value)
+
+        console.log("newval", value);
+        
+        options.editorCallback ? options.editorCallback(value) : null
+        }} 
+        options={[
+            { value: "0" },
+            { value: "5.5" },
+            { value: "10" },
+            { value: "20" }
+        ]}
+        optionLabel="value" 
+        optionValue="value"
+        editable placeholder="TVA" />
+    
+    }
+
+export default function LineTable({ lines, emptyMessage = "Vide", editable = false, onChange = undefined }: { lines?: line[], emptyMessage?: string, editable?: boolean, onChange?: (lines: line[]) => void }) {
+    const onRowEditComplete = (e: DataTableRowEditCompleteEvent) => {
+        if (lines && onChange) {
+            let linesEdited = [...lines];
+            let { newData, index } = e;
+            
+            linesEdited[index] = newData;
+            
+            onChange(linesEdited);
+        }
+    };
+    
+    return (
+                <>
+    <DataTable value={lines} size="small" emptyMessage={emptyMessage} editMode={editable ? "row" : undefined} onRowEditComplete={onRowEditComplete} >
+                <Column field="label" header="Type" />
+                <Column field="qte" editor={(options) => numberEditor(options)} header="Qte"></Column>
+                <Column field="prixHt" editor={(options) => numberEditor(options)} header="Prix HT"></Column>
+                <Column field="tva" editor={(options) => tvaEditor(options)} header="TVA"></Column>
+                <Column field="remise" editor={(options) => numberEditor(options)} header="Remise"></Column>
+                <Column body={(data: line) => {
+                    return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
+                }} header="Total"></Column>
+                {editable && <Column rowEditor={true} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>}
+            </DataTable>
+            <InputNumber value={0} />
+            </>)
 }
