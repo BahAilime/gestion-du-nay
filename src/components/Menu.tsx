@@ -13,6 +13,7 @@ export default function Menu() {
         <div className="flex flex-col gap-4">
             <MenuSection text="Dossiers" type="PROD">
                 <MenuItem text="Nouveau dossier" icon={menuIcon(faFolderPlus)} url="/dossier/nouveau"/>
+                <MenuItem text="Nouveau dossier BDE" icon={menuIcon(faFolderPlus)} url="/dossier2/nouveau"/>
                 <MenuItem text="Liste des dossiers" icon={menuIcon(faFolderTree)} url="/dossier"/>
             </MenuSection>
             <MenuSection text="Clients" type="PROD">
@@ -24,7 +25,6 @@ export default function Menu() {
                 <MenuItem text="Carte + hook" icon={menuIcon(faFolderPlus)} url="/test/maphook"/>
                 <MenuItem text="useDossier" icon={menuIcon(faFolderPlus)} url="/test/useDossier"/>
             </MenuSection>
-            
         </div>
     )
 }
