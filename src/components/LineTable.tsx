@@ -45,12 +45,7 @@ function tvaEditor (options: ColumnEditorOptions) {
         value={options.value}
         onChange={(e) => options.editorCallback ? options.editorCallback(e.value) : null}
         onBlur={(e) => {
-        console.log("oldvel", e.target.value);
-        
         const value = stringToNumber(e.target.value)
-
-        console.log("newval", value);
-        
         options.editorCallback ? options.editorCallback(value) : null
         }} 
         options={[
@@ -82,8 +77,11 @@ export default function LineTable({ lines, emptyMessage = "Vide", editable = fal
         <Column field="label" header="Type" />
         <Column field="qte" editor={(options) => numberEditor(options)} header="Qte"></Column>
         <Column field="prixHt" editor={(options) => numberEditor(options)} header="Prix HT"></Column>
-        <Column field="tva" editor={(options) => tvaEditor(options)} header="TVA"></Column>
         <Column field="remise" editor={(options) => numberEditor(options)} header="Remise"></Column>
+        <Column field="tva" editor={(options) => tvaEditor(options)} header="TVA"></Column>
+        <Column body={(data: line) => {
+            return Math.round((data.qte ?? 0) * (data.prixHt ?? 0) * 100) / 100
+            }} header="Total HT"></Column>
         <Column body={(data: line) => {
             return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
         }} header="Total"></Column>
