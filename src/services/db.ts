@@ -64,6 +64,7 @@ type Dossier = {
         jardin: number,
         orientation: number,
         equestre: number,
+        ref?: string,
     },
     client?: client,
     nuits: {
@@ -97,6 +98,51 @@ type Dossier = {
     lastSeen?: any
 }
 
+type DossierBDE = {
+    infos: {
+        debut?: Date,
+        fin?: Date,
+        nuits: number,
+        adultes: number,
+        enfants: number,
+        petitdej: number,
+        repas: number,
+        gouter: number,
+        piquenique: number,
+        naturepeda: number,
+        jardin: number,
+        orientation: number,
+        ref?: string,
+    },
+    client?: client,
+    nuits: {
+        drap: line,
+        lines: {
+            nuitAvecDrapDessus: line,
+            nuitSansDrapDessus: line,
+            autres?: line[]
+        }
+    },
+    repas: {
+        servi: boolean,
+        lines: {
+            petitdej:line,
+            repas:line,
+            piquenique:line,
+            gouter:line,
+            autres?: line[],
+        }
+    },
+    activite: {
+        naturepeda: line,
+        jardin: line,
+        orientation: line,
+        autres?: line[],
+    },
+    divers?: line[],
+    lastSeen?: any
+}
+
 export function dossierTemplate() {
     const dossier: Dossier = {
         infos: {
@@ -118,9 +164,8 @@ export function dossierTemplate() {
                 label: "Drap", qte: 0, prixHt: 0, tva: 0, remise: 0
             },
             lines: {
-                adulte:{label: "Adulte", qte: 0, prixHt: 15.70, tva: 10, remise: 0},
-                enfant:{label: "Enfant", qte: 0, prixHt: 14.3, tva: 10, remise: 0}
-
+                adulte:{label: "Adulte", qte: 0, prixHt: 14.27, tva: 10, remise: 0},
+                enfant:{label: "Enfant", qte: 0, prixHt: 13, tva: 10, remise: 0}
             }
         },
         repas: {
@@ -135,15 +180,57 @@ export function dossierTemplate() {
             }
         },
         activite: {
-            naturepeda:{label: "Nature-peda", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
+            naturepeda:{label: "Nature-peda", qte: 0, prixHt: 4.91, tva: 10, remise: 0},
             jardin:{label: "Jardin", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
-            orientation:{label: "Orientation", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
-            equestre:{label: "Equestre", qte: 0, prixHt: 12, tva: 10, remise: 0}
+            orientation:{label: "Orientation", qte: 0, prixHt: 4.91, tva: 10, remise: 0},
+            equestre:{label: "Equestre", qte: 0, prixHt: 11.38, tva: 5.5, remise: 0}
         },
         divers: [
             {key: "communs", label: "Gestion libre des lieux communs", qte: 0, prixHt: 95.45, tva: 10, remise: 0},
             {key: "menage", label: "Forfait ménage de fin de séjour", qte: 0, prixHt: 91.67, tva: 20, remise: 0},
         ]
+    }
+
+    return dossier
+}
+
+export function dossierTemplateDBE() {
+    const dossier: DossierBDE = {
+        infos: {
+            nuits: 0,
+            adultes: 0,
+            enfants: 0,
+            petitdej: 0,
+            repas: 0,
+            gouter: 0,
+            piquenique: 0,
+            naturepeda: 0,
+            jardin: 0,
+            orientation: 0,
+        },
+        nuits: {
+            drap: {
+                label: "Drap", qte: 0, prixHt: 0, tva: 0, remise: 0
+            },
+            lines: {
+                nuitAvecDrapDessus:{label: "Nuitée avec drap du dessus", qte: 0, prixHt: 19.09, tva: 10, remise: 0},
+                nuitSansDrapDessus:{label: "Nuitée sans drap du dessus", qte: 0, prixHt: 17.27, tva: 10, remise: 0}
+            }
+        },
+        repas: {
+            servi: false,
+            lines: {
+                petitdej:{label: "Petit déjeuner servi", qte: 0, prixHt: 5.27, tva: 10, remise: 0},
+                repas:{label: "Repas servi", qte: 0, prixHt: 9.09, tva: 10, remise: 0},
+                piquenique:{label: "Pique-nique individuel", qte: 0, prixHt: 7.48, tva: 5.5, remise: 0},
+                gouter:{label: "Goûter", qte: 0, prixHt: 2.74, tva: 5.5, remise: 0}
+            }
+        },
+        activite: {
+            naturepeda:{label: "Nature-peda", qte: 0, prixHt: 4.91, tva: 10, remise: 0},
+            jardin:{label: "Jardin", qte: 0, prixHt: 6.36, tva: 10, remise: 0},
+            orientation:{label: "Orientation", qte: 0, prixHt: 4.91, tva: 10, remise: 0},
+        },
     }
 
     return dossier
@@ -229,13 +316,14 @@ export function deleteClient(id: number|string, callback: () => void) {
     }
 
 
-export function newDossier(data:dossier, callback: (client: DatabaseReference) => void) {
+export function newDossier(data:Dossier, callback: (client: DatabaseReference) => void) {
     data.lastSeen = serverTimestamp()
+    delete data.client
     let dataTransition: any = data
-    if (data.infos?.debut) {
+    if (data.infos.debut) {
         dataTransition.infos.debut = getUnixTime(data.infos.debut)
     }
-    if (data.infos?.fin) {
+    if (data.infos.fin) {
         dataTransition.infos.fin = getUnixTime(data.infos?.fin)
     }
 
