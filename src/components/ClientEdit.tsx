@@ -4,12 +4,12 @@ import ClientForm from "@/src/components/ClientForm";
 import { Card } from 'primereact/card';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'
 import BigButton from "@/src/components/BigButton";
-import { client, getClientOnce, updateClient } from "@/src/services/db";
+import { Client, getClientOnce, updateClient } from "@/src/services/db/Client";
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 
 export default function ClientEdit() {
-    const [data, setData] = useState({});
-    const [client, setClient] = useState<client>();
+    const [data, setData] = useState<Client>();
+    const [client, setClient] = useState<Client>();
     const router = useRouter()
     const params = useSearchParams()
     const firebase_id = params.get("firebase_id")
@@ -18,8 +18,8 @@ export default function ClientEdit() {
       if (!firebase_id) {
         redirect("/client")
       }
-      getClientOnce(firebase_id).then((user) => {   
-          setClient(user)
+      getClientOnce(firebase_id).then((client: Client) => {   
+          setClient(client)
       }).catch((error) => {
           console.error(error);
       });
@@ -30,7 +30,9 @@ export default function ClientEdit() {
         redirect("/client")
       }
 
-      updateClient(firebase_id, data, () => {
+      if (!data) return
+
+      updateClient(firebase_id, data).then(() => {
           router.push(`/client/detail?${params.toString()}`)
         })
     }

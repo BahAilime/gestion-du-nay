@@ -1,15 +1,15 @@
 'use client'
 import { useEffect, useState } from "react";
 import { Dropdown } from 'primereact/dropdown';
-import { getClientsOnce } from "@/src/services/db";
+import { Client, getClientsOnce } from "@/src/services/db/Client";
 import Loading from "./Loading";
 
 export default function ClientDropDown({value="", onChange = (x: any) => x }) {
-    const [selectedCli, setSelectedCli] = useState(value);
-    const [clients, setClients] = useState<any[]>();
+    const [selectedCli, setSelectedCli] = useState<string>(value);
+    const [clients, setClients] = useState<{ label: string, items: any }[]>();
 
-    function clientsToDropdown(inputArray: any[]) {
-        const grouped = inputArray.reduce((acc, client) => {
+    function clientsToDropdown(inputArray: Client[]) {
+        const grouped = inputArray.reduce((acc: any, client) => {
             let { type_cli, firebase_id, nom_cli, resp_cli } = client;
             if (!type_cli) {
                 type_cli = "Inconnu";
@@ -31,7 +31,7 @@ export default function ClientDropDown({value="", onChange = (x: any) => x }) {
 
     useEffect(()=>{
         getClientsOnce()
-            .then((data: any[]) => {
+            .then((data: Client[]) => {
                 setClients(clientsToDropdown(data));
             })
     }, [])

@@ -2,33 +2,33 @@
 import { useEffect, useState, useMemo } from "react"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 import { Card } from "primereact/card";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
-import { faTrash, faUser, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
 
-import useFindCoordinates from "../hooks/useFindCoordinates";
+// import useFindCoordinates from "../hooks/useFindCoordinates";
 
-import { client, deleteClient, getClientOnce } from "../services/db";
-import Loading from "../components/Loading";
+import { Client, deleteClient, getClientOnce } from "../services/db/Client";
+// import Loading from "../components/Loading";
 import SimpleEditor from "../components/SimpleEditor";
 import BigButton from "./BigButton";
 
 export default function ClientDetail() {
-    const Map = useMemo(() => dynamic(
-        () => import("../components/Map"),
-        { 
-          loading: () => <Loading text={"Chargement de la carte..."} />,
-          ssr: false
-        }
-      ), [])
+    // const Map = useMemo(() => dynamic(
+    //     () => import("../components/Map"),
+    //     { 
+    //       loading: () => <Loading text={"Chargement de la carte..."} />,
+    //       ssr: false
+    //     }
+    //   ), [])
+    // const { coordinates, setSearchInfos } = useFindCoordinates()
 
-    const [user, setUser] = useState<client>()
+    const [client, setClient] = useState<Client>()
     const params = useSearchParams()
     const firebase_id = params.get("firebase_id")
-    const { coordinates, setSearchInfos } = useFindCoordinates()
     const router = useRouter();
 
     const confirmSuppr = () => {
@@ -46,25 +46,27 @@ export default function ClientDetail() {
             router.push("/client")
             return
         }
-        deleteClient(firebase_id, () => {
-            router.push("/client")
-        })
+        if (client) {
+            deleteClient(client).then(() => {
+                router.push("/client")
+            })
+        }
     }
 
     useEffect(() => {
+        
         if (!firebase_id) {
             router.push("/client")
             return
         }
-        getClientOnce(firebase_id).then((user) => {  
-            const addressComponents = [
-                user.adr_cli,
-                user.ville_cli,
-                user.cp_cli
-            ].filter(Boolean);
-
+        getClientOnce(firebase_id).then((client: Client) => {  
+            // const addressComponents = [
+            //     client.adr_cli,
+            //     client.ville_cli,
+            //     client.cp_cli
+            // ].filter(Boolean);
             // setSearchInfos(addressComponents);
-            setUser(user)
+            setClient(client)
         }).catch((error) => {
             console.error(error);
         });
@@ -72,8 +74,8 @@ export default function ClientDetail() {
 
     
     
-    if (user) {
-        const { adr_cli, ville_cli, cp_cli, nom_cli, tel_cli, resp_cli, email_cli, notes_cli}: client = user;
+    if (client) {
+        const { adr_cli, ville_cli, cp_cli, nom_cli, tel_cli, resp_cli, email_cli, notes_cli}: Client = client;
         const address = adr_cli && ville_cli && cp_cli ? `${adr_cli}, ${cp_cli.toUpperCase()} ${ville_cli.toUpperCase()}` : null;
         
         return (

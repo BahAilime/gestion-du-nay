@@ -4,20 +4,20 @@ import ClientForm from "../../../src/components/ClientForm";
 import { Card } from 'primereact/card';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'
 import BigButton from "@/src/components/BigButton";
-import { client, newClient } from "@/src/services/db";
+import { Client, newClient } from "@/src/services/db/Client";
 import { useRouter } from 'next/navigation'
 
 
 export default function Home() {
-    const [data, setData] = useState<client>();
+    const [data, setData] = useState<Client>();
     const router = useRouter()
     const searchParams = new URLSearchParams();
     
     function save() {
       if (!data) return
-      newClient(data, (client) => {
+      newClient(data).then((client: Client) => {
         try {
-          searchParams.append("firebase_id", client.key ?? "error")
+          searchParams.append("firebase_id", client.firebase_id ?? "error")
           router.push(`/client/detail?${searchParams.toString()}`)
         } catch (error) {
           console.log(error)

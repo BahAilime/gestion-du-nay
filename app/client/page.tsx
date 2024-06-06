@@ -5,14 +5,14 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useRouter } from 'next/navigation'
 import Loading from '@/src/components/Loading';
-import { getClientsOnce } from '@/src/services/db';
+import { Client, getClientsOnce } from '@/src/services/db/Client';
 
 export default function Home() {
     const [client, setClient] = useState<any[]>();
     const router = useRouter();
 
     useEffect(() => {
-        getClientsOnce().then((data) => {
+        getClientsOnce().then((data: Client[]) => {
             setClient(data);
         });
     }, [])
