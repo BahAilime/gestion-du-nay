@@ -5,7 +5,8 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useRouter } from 'next/navigation'
 import Loading from '@/src/components/Loading';
-import { dossier, getDossiersOnce } from '@/src/services/db';
+import { Dossier } from '@/src/services/db/Dossier';
+import { getAllDossierOnce } from '@/src/services/db';
 import { format } from 'date-fns/format';
 
 export default function Home() {
@@ -13,12 +14,12 @@ export default function Home() {
     const router = useRouter();
 
     useEffect(() => {
-        getDossiersOnce().then((data) => {
+        getAllDossierOnce().then((data) => {
             setDossiers(data);
         });
     }, [])
 
-    function dateTemplate(data: dossier) {
+    function dateTemplate(data: Dossier) {
         if (!data?.infos?.debut || !data?.infos?.fin) {
             return <div>Pas encore de dates</div>
         }
@@ -33,9 +34,9 @@ export default function Home() {
         <Card title="Dossiers" className="w-full min-h-full">
             {dossiers ?
             <DataTable  value={dossiers} className="w-full" selectionMode="single" onSelectionChange={(e) => router.push(`/dossier/detail?firebase_id=${e.value.firebase_id}`)}>
-                <Column body={(data: dossier) => <div><span className="font-bold">{data?.client?.nom_cli}</span><br/>{data?.client?.resp_cli}</div>} header="Client"></Column>
+                <Column body={(data: Dossier) => <div><span className="font-bold">{data?.client?.nom_cli}</span><br/>{data?.client?.resp_cli}</div>} header="Client"></Column>
                 <Column body={dateTemplate} header="Dates"></Column>
-                <Column header="Effectif" body={(data: dossier) => <div>{data?.infos?.enfants} enfants et {data?.infos?.adultes} adultes</div>}></Column>
+                <Column header="Effectif" body={(data: Dossier) => <div>{data?.infos?.enfants} enfants et {data?.infos?.adultes} adultes</div>}></Column>
             </DataTable>
             : <Loading text={"Chargement des dossiers..."}/>}
         </Card>
