@@ -24,6 +24,7 @@ export default function Menu() {
                 <MenuItem text="Carte" icon={menuIcon(faFolderPlus)} url="/test/map"/>
                 <MenuItem text="Carte + hook" icon={menuIcon(faFolderPlus)} url="/test/maphook"/>
                 <MenuItem text="useDossier" icon={menuIcon(faFolderPlus)} url="/test/useDossier"/>
+                <MenuItem text="DB client" icon={menuIcon(faFolderPlus)} url="/test/dbClient"/>
             </MenuSection>
         </div>
     )
