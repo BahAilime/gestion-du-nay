@@ -32,16 +32,22 @@ export function clientTemplate(): Client {
 }
 
 export function getClientOnce(id: string): Promise<Client> {
-    return get(child(clientsRef, `${id}`))
+    return get(child(clientsRef, id))
         .then((snapshot) => {
             if (snapshot.exists()) {
                 update(snapshot.ref, {lastSeen: serverTimestamp()})
-                return snapshot.val();
+                const client: Client = snapshot.val();
+                if (snapshot.key) {
+                    client.firebase_id = snapshot.key
+                    return client
+                } else {
+                    throw new Error("No snapshot key ?")
+                }
             } else {
-                return {};
+                throw new Error("No client found");
             }
         }).catch((error) => {
-            console.warn("DB getClientOnce:", error);
+            throw new Error(`DB getClientOnce: ${error}`);
         });
 }
 
