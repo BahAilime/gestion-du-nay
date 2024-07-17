@@ -209,3 +209,46 @@ export function deleteDossier(dossier: Dossier): Promise<Dossier> {
             }
         })
     }
+
+    export function getDossierNuitsLines(dossier: Dossier): Line[] {
+        const lines = []
+        console.log("nuits", dossier)
+
+        lines.push(dossier.nuits.lines.adulte)
+        lines.push(dossier.nuits.lines.enfant)
+        if (dossier.nuits.lines.autres) {
+            lines.concat(dossier.nuits.lines.autres)
+        }
+        
+        return lines;
+    }
+
+    export function getDossierRepasLines(dossier: Dossier): Line[] {
+        const lines = []
+
+        lines.push(dossier.repas.lines.repasAdulte)
+        lines.push(dossier.repas.lines.repasCollegien)
+        lines.push(dossier.repas.lines.repasEnfant)
+        lines.push(dossier.repas.lines.gouter)
+        lines.push(dossier.repas.lines.piquenique)
+        if (dossier.repas.lines.autres) {
+            lines.concat(dossier.repas.lines.autres)
+        }
+        
+        return lines;
+    }
+
+    export function getDossierActivitesLines(dossier: Dossier): Line[] {
+        const lines = []
+        
+        lines.push(dossier.activite.naturepeda)
+        lines.push(dossier.activite.jardin)
+        lines.push(dossier.activite.equestre)
+        lines.push(dossier.activite.orientation)
+
+        if (dossier.activite.autres) {
+            lines.concat(dossier.activite.autres)
+        }
+
+        return lines;
+    }

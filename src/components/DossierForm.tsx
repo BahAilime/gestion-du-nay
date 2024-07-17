@@ -11,50 +11,22 @@ import { ToggleButton } from "primereact/togglebutton";
 import { Calendar } from "primereact/calendar";
 import BigButton from "./BigButton";
 import useDossier from "@/src/hooks/useDossier";
-import { dossier, dossierTemplate } from "@/src/services/db";
+import { Dossier, dossierTemplate } from "@/src/services/db/Dossier";
+import { Line } from "../services/db/Line"; 
 import { differenceInDays } from 'date-fns/differenceInDays';
 import Counter from "./Counter";
 import LineTable from "./LineTable";
 
 // TODO: rendre ca configurable
 
-const defaultDossier: dossier = {
-    nuits: {
-        lines: [
-            { key: "enfant", label: "Enfant", qte: 0, prixHt: 12.45, tva: 10, remise: 0 },
-            { key: "adlte", label: "Adulte", qte: 0, prixHt: 13.64, tva: 10, remise: 0 }
-        ]
-    },
-    repas: {
-        lines: [
-            { key: "dej", label: "Petit déjeuner", qte: 0, prixHt: 4.82, tva: 10, remise: 0 },
-            { key: "enf", label: "Repas enfant", qte: 0, prixHt: 7.55, tva: 10, remise: 0 },
-            { key: "coll", label: "Repas collègien", qte: 0, prixHt: 8.45, tva: 10, remise: 0 },
-            { key: "adlte", label: "Repas adulte", qte: 0, prixHt: 10.18, tva: 10, remise: 0 },
-            { key: "piquenique", label: "Pique-nique indiv. enfant et adulte", qte: 0, prixHt: 7.44, tva: 10, remise: 0 },
-            { key: "gouter", label: "Goûter enfant et adulte", qte: 0, prixHt: 1.85, tva: 5.5, remise: 0 }
-        ],
-    },
-    activite: [
-        { key: "natpeda", label: "Séance activité nature-péda enf.", qte: 0, prixHt: 6.36, tva: 10, remise: 0 },
-        { key: "jard", label: "Séance activité jardin enfant", qte: 0, prixHt: 6.36, tva: 10, remise: 0 },
-        { key: "eque", label: "Séance activité équestre", qte: 0, prixHt: 12, tva: 10, remise: 0 },
-        { key: "orien", label: "Course d'orientation", qte: 0, prixHt: 6.36, tva: 10, remise: 0 },
-    ],
-    divers: [
-        { key: "communs", label: "Gestion libre des lieux communs", qte: 0, prixHt: 0, tva: 10, remise: 0 },
-        { key: "menage", label: "Forfait ménage de fin de séjour", qte: 0, prixHt: 0, tva: 20, remise: 0 },
-    ]
-}
-
-export default function DossierForm({ dossierImport = defaultDossier, buttonText = "Valider", buttonIcon, onFormSubmit }: { dossierImport?: dossier, buttonText?: string, buttonIcon?: IconDefinition, onFormSubmit?: (dossier: dossier) => void }) {
+export default function DossierForm({ dossierImport = undefined, buttonText = "Valider", buttonIcon, onFormSubmit }: { dossierImport?: Dossier, buttonText?: string, buttonIcon?: IconDefinition, onFormSubmit?: (dossier: Dossier) => void }) {
     const [activeIndex, setActiveIndex] = useState(0);
     const items = [
         { label: 'Déja venu', icon: <FontAwesomeIcon icon={faHeart} className="mr-2" /> },
         { label: 'Nouveau client', icon: <FontAwesomeIcon icon={faUserPlus} className="mr-2" /> },
     ];
 
-    const [dossier, setDossier] = useDossier(dossierImport);
+    // const [dossier, setDossier] = useDossier(dossierImport);
     const [newDossier, setNewDossier] = useState(dossierTemplate());
 
     function refreshValues() {
@@ -168,7 +140,7 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
     }
 
     useEffect(() => {
-        if (dossier.idClient) {
+        if (newDossier.idClient) {
             setActiveIndex(0);
         }
     }, [])
@@ -178,13 +150,19 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
             {activeIndex === 0 &&
                 <Card title="Client" className="w-full h-full col-span-1 row-span-1">
                     <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
-                    <ClientDropDown value={dossier?.idClient} onChange={(client: string) => setDossier("idClient", client)} />
+                    <ClientDropDown value={newDossier?.idClient} onChange={(client: string) => {
+                            newDossier.idClient = client;
+                            setNewDossier({ ...newDossier })
+                        }} />
                 </Card>}
 
             {activeIndex === 1 &&
                 <Card title="Client" className="w-full h-full col-span-2 row-span-2">
                     <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
-                    <ClientForm onChange={(clientInfos) => setDossier("client", clientInfos)} />
+                    <ClientForm onChange={(client) => {
+                            newDossier.client = client
+                            setNewDossier({ ...newDossier })
+                        }} />
                 </Card>}
 
             <Card className="w-full h-full col-span-2" title="Informations sur le séjour">
@@ -247,7 +225,8 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
                         }} />
                     </div>
                 </div>
-                <h1 className="text-xl font-medium">Dates</h1>
+                <br />
+                    <h1 className="text-xl font-medium">Dates</h1>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Jour d&apos;arrivée:</p>
                     <Calendar dateFormat="dd/mm/yy" locale="fr" showButtonBar value={newDossier.infos.debut} onChange={(e) => {
@@ -258,7 +237,7 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
                 </div>
                 <div className="flex flex-row gap-2 items-center my-2 justify-between">
                     <p>Jour du départ:</p>
-                    <Calendar dateFormat="dd/mm/yy" locale="fr" showButtonBar value={dossier?.infos?.fin} onChange={(e) => {
+                    <Calendar dateFormat="dd/mm/yy" locale="fr" showButtonBar value={newDossier.infos.fin} onChange={(e) => {
                         if (!e.value) return
                         newDossier.infos.fin = e.value
                         setNewDossier({ ...newDossier })
@@ -284,7 +263,10 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
                 }} />
                 <div className="flex flex-row gap-2 items-center my-2">
                     Location de drap:
-                    <InputNumber value={dossier.nuits?.drap} onChange={(e) => { setDossier("nuits.drap", e.value ?? 0); }} />
+                    <InputNumber value={newDossier.nuits.drap.qte} onChange={(e) => {
+                            newDossier.nuits.drap.qte = e.value ?? 0
+                            setNewDossier({ ...newDossier })
+                        }} />
                 </div>
             </Card>
 
@@ -306,7 +288,10 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
 
                 <div className="flex flex-row gap-2 items-center my-2">
                     Repas et petit dej servi:
-                    <ToggleButton className="servi" checked={dossier.repas?.servi} onChange={(e) => setDossier("repas.servi", e.value)} onLabel="Oui" offLabel="Non" />
+                    <ToggleButton className="servi" checked={newDossier.repas.servi} onChange={(e) => {
+                            newDossier.repas.servi = e.value
+                            setNewDossier({ ...newDossier })
+                        }}onLabel="Oui" offLabel="Non" />
                 </div>
 
             </Card>
@@ -326,7 +311,16 @@ export default function DossierForm({ dossierImport = defaultDossier, buttonText
             </Card>
 
             <Card className="w-full h-full" title="Valier">
-                <BigButton text={buttonText} icon={buttonIcon} onClick={() => { if (onFormSubmit) onFormSubmit(dossier) }} />
+                <BigButton text={buttonText} icon={buttonIcon} onClick={() => {
+                    if (onFormSubmit) {
+                        onFormSubmit(newDossier)
+                        }
+                    else {
+                        console.warn("No form submit handler"); 
+                    }
+
+                        
+                    }} />
             </Card>
 
             <Debug>

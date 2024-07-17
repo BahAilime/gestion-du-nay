@@ -1,6 +1,6 @@
 import { Column, ColumnEditorOptions } from "primereact/column"
 import { DataTable, DataTableRowEditCompleteEvent } from "primereact/datatable"
-import { line } from "../services/db"
+import { Line } from "../services/db/Line"
 import { calcPrice, stringToNumber } from "../services/utils"
 import { InputText } from "primereact/inputtext"
 import { Dropdown } from "primereact/dropdown"
@@ -60,13 +60,20 @@ function tvaEditor (options: ColumnEditorOptions) {
     
     }
 
-export default function LineTable({ lines, emptyMessage = "Vide", editable = false, onChange = undefined }: { lines?: line[], emptyMessage?: string, editable?: boolean, onChange?: (lines: line[]) => void }) {
+export default function LineTable({ lines, emptyMessage = "Vide", editable = false, onChange = undefined }: { lines?: Line[], emptyMessage?: string, editable?: boolean, onChange?: (lines: Line[]) => void }) {
     const onRowEditComplete = (e: DataTableRowEditCompleteEvent) => {
         if (lines && onChange) {
             let linesEdited = [...lines];
-            let { newData, index } = e;
+            // transform newData to Line
+            let newData: Line = {
+                label: e.newData.label,
+                qte: e.newData.qte,
+                prixHt: e.newData.prixHt,
+                tva: e.newData.tva,
+                remise: e.newData.remise
+            };
             
-            linesEdited[index] = newData;
+            linesEdited[e.index] = newData;
             
             onChange(linesEdited);
         }
@@ -79,10 +86,10 @@ export default function LineTable({ lines, emptyMessage = "Vide", editable = fal
         <Column field="prixHt" editor={(options) => numberEditor(options)} header="Prix HT"></Column>
         <Column field="remise" editor={(options) => numberEditor(options)} header="Remise"></Column>
         <Column field="tva" editor={(options) => tvaEditor(options)} header="TVA"></Column>
-        <Column body={(data: line) => {
+        <Column body={(data: Line) => {
             return Math.round((data.qte ?? 0) * (data.prixHt ?? 0) * 100) / 100
             }} header="Total HT"></Column>
-        <Column body={(data: line) => {
+        <Column body={(data: Line) => {
             return calc(data.prixHt, data.qte, data.tva, data.remise)+"€"
         }} header="Total"></Column>
         {editable && <Column rowEditor={true} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>}
